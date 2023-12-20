@@ -1,0 +1,13 @@
+.home {
+  --account-book-menu-color: #7c7ae8;
+}
+
+.grid-item-icon-class {
+  font-size: 70rpx !important;
+  color: var(--account-book-menu-color) !important;
+}
+
+.grid-item-text-class {
+  font-size: 30rpx !important;
+  color: var(--account-book-menu-color) !important;
+}

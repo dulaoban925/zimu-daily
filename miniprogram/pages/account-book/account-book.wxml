@@ -1,0 +1,70 @@
+<!--
+  账本列表页面
+-->
+<view class="account-book page-container">
+  <van-empty wx:if="{{accountBooks.length === 0}}" description="暂无账本" />
+  <block wx:else>
+    <van-swipe-cell 
+      class="account-book-item-cell" 
+      wx:for="{{accountBooks}}" 
+      wx:key="id" 
+      right-width="{{ 65 }}"
+      name="{{item.id}}">
+      <view 
+        class="account-book-item" 
+        data-id="{{item.id}}" 
+        bindtap="handleEditClick">
+        <view class="item-thumbnail">
+          <image src="{{item.thumbnail}}" />
+        </view>
+        <view class="item-content">
+          <view class="item-name">{{item.name}}</view>
+          <view class="item-amount">
+            <text>总收入：<text style="color: #4eae70; font-weight: bold;">￥{{item.incomes || 0}}</text></text>
+            <text>总支出：<text style="color: #ec3323; font-weight: bold;">￥{{item.expenses || 0}}</text></text>
+          </view>
+        </view>
+      </view>
+      <van-button 
+        slot="right" 
+        type="danger" 
+        square 
+        custom-style="height: 100%;"
+        data-id="{{ item.id }}"
+        bind:click="handleDelete">删除</van-button>
+    </van-swipe-cell>
+  </block>
+  <!-- 新建账本悬浮按钮 -->
+  <van-button class="add-button" icon="plus" type="info" round bind:click="handleAddClick" />
+  <!-- 新建账本 -->
+  <van-action-sheet 
+    show="{{showAddTypes}}" 
+    title="请选择账本类型"
+    bind:close="handleActionSheetClose">
+    <van-grid column-num="3" clickable>
+      <van-grid-item 
+        wx:for="{{accountBookTypes}}"
+        wx:key="key"
+        use-slot
+        data-type="{{item}}"
+        bind:tap="handleAccountBookTypeTap">
+        <image
+          style="width: 100rpx; height: 100rpx;"
+          src="{{item.image}}"
+        />
+        <text>{{item.label}}</text>
+      </van-grid-item>
+    </van-grid>
+  </van-action-sheet>
+  <!-- 新建账本编辑账本名称 -->
+  <van-dialog 
+    use-slot
+    show="{{showAbNameDialog}}"
+    showConfirmButton="{{false}}">
+    <view class="ab-name-dialog-content">
+      <input placeholder="请填写账本名称" bindconfirm="handleAbNameConfirm" />
+    </view>
+  </van-dialog>
+  <!-- 弹窗实例，用于 API 调用 -->
+  <van-dialog id="van-dialog" />
+</view>

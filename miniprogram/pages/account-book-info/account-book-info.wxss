@@ -1,0 +1,42 @@
+.info-header {
+  width: 100%;
+  padding: 40rpx 20rpx 10rpx 20rpx;
+  background: no-repeat right/100% url(https://pic.52112.com/180406/180406_191/yWco75ssT5_small.jpg);
+}
+
+.month-header {
+  background-color: #ffffff;
+  padding: 0 var(--common-padding-margin);
+  margin-top: var(--common-padding-margin);
+}
+
+.swipe-cell .van-swipe-cell {
+  margin: var(--common-padding-margin);
+}
+
+.month-item {
+  background-color: #ffffff;
+  padding: var(--common-padding-margin);
+  border-radius: 20rpx;
+}
+
+.item-source {
+  font-size: 38rpx;
+  font-weight: bold;
+  line-height: 38rpx;
+}
+
+.item-amount {
+  line-height: 60rpx;
+}
+
+.item-comment {
+  font-size: 28rpx;
+  color: #6e6e6e;
+}
+
+.add-button {
+  position: fixed;
+  right: 0;
+  bottom: 200rpx;
+}

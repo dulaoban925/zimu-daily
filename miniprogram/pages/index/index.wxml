@@ -1,0 +1,28 @@
+<!--
+  首页
+  内容：
+    1.轮播图
+    2.菜单
+    3.快捷入口（待定）
+-->
+<view class="home">
+  <swiper style="height: 400rpx;" indicator-dots autoplay circular>
+    <swiper-item wx:for="{{swiperList}}" wx:key="src">
+      <image src="{{item.src}}" style="width: 100%; height: 100%;"></image>
+    </swiper-item>
+  </swiper>
+  <view class="menu">
+    <van-grid column-num="3" border="{{false}}" clickable="{{true}}">
+      <van-grid-item 
+        wx:for="{{menus}}"
+        wx:key="code"
+        icon="{{item.icon}}"
+        text="{{item.text}}"
+        link-type="navigateTo"
+        url="{{item.url}}"
+        icon-class="grid-item-icon-class"
+        text-class="grid-item-text-class"
+        />
+    </van-grid>
+  </view>
+</view>
