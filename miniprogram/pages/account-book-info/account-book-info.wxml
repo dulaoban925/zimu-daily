@@ -2,7 +2,7 @@
   账本明细列表页面
 -->
 <view class="account-book-info page-container">
-  <view class="info-header" style="background-image: {{info.header.thumbnail}};">
+  <view class="info-header" style="background-image: {{info.header.image}};">
     <text>收入：<text style="color: #4eae70; font-weight: bold; padding-right: 40rpx;">{{info.header.incomes}}</text></text>
     <text>支出：<text style="color: #ec3323; font-weight: bold;">{{info.header.expenses}}</text></text>
   </view>

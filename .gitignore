@@ -1,2 +1,4 @@
 /node_modules
 /miniprogram/miniprogram_npm
+/server/node_modules
+/server/dist

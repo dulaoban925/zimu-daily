@@ -1,6 +1,7 @@
 import { ACCOUNT_BOOK_TYPES } from "../../constants/data"
 import { navigateTo } from "../../utils/rotuer"
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
+import request from "../../utils/request"
 
 interface AccountBook {
   id: string
@@ -8,7 +9,7 @@ interface AccountBook {
   type: string // 账本类别
   incomes: number
   expenses: number
-  thumbnail: string
+  image: string
   created: string
   cratedBy: string
 }
@@ -89,29 +90,14 @@ Page({
   },
 
   // 查询账本列表
-  queryAccountBooks: function (page = 1, pageSize = 10) {
+  queryAccountBooks: async function (page = 1, pageSize = 10) {
     console.log(page, pageSize)
-    // this.setData({
-    //   accountBooks: [{
-    //     id: '1',
-    //     name: '账本1', // 账本名称
-    //     type: 'custom', // 账本类别
-    //     incomes: 20000, // 收入
-    //     expenses: 10000, // 支出
-    //     thumbnail: 'https://pic.52112.com/180406/180406_191/yWco75ssT5_small.jpg', // 缩略图
-    //     created: '2023-12-15', // 创建时间
-    //     cratedBy: '李莹' // 创建人
-    //   }, {
-    //     id: '2',
-    //     name: '账本2', // 账本名称
-    //     type: 'custom', // 账本类别
-    //     incomes: 30000, // 收入
-    //     expenses: 20000, // 支出
-    //     thumbnail: 'https://pic.52112.com/180406/180406_191/yWco75ssT5_small.jpg', // 缩略图
-    //     created: '2023-12-15', // 创建时间
-    //     cratedBy: '李莹' // 创建人
-    //   }]
-    // })
+    const { data } = await request({
+      url: `/account-book/queryByPage?page=${page}&pageSize=${pageSize}`
+    })
+    this.setData({
+      accountBooks: data
+    })
   },
 
   // 新增账本
@@ -140,7 +126,7 @@ Page({
       type: abType.key,
       incomes: 0, // 收入
       expenses: 0, // 支出
-      thumbnail: abType.image, // 缩略图
+      image: abType.image, // 缩略图
       created: '2023-12-15', // 创建时间
       cratedBy: '李莹' // 创建人
     }

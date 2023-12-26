@@ -15,7 +15,7 @@
   margin-top: var(--common-padding-margin);
 }
 
-.item-thumbnail image {
+.item-image image {
   height: 200rpx; 
   width: 200rpx; 
   margin-top: 5px; /** 图片问题，下方有留白 */

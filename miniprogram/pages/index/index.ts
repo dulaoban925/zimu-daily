@@ -2,8 +2,8 @@ Page({
   data: {
     // 轮播图
     swiperList: [
-      {src: '/assets/banner1.jpg'},
-      {src: '/assets/banner2.jpg'},
+      {src: 'http://localhost:3000/banner1.jpg'},
+      {src: 'http://localhost:3000/banner2.jpg'},
     ],
     // 菜单
     menus: [

@@ -120,7 +120,7 @@ Page({
           name: '账本1', // 账本名称
           incomes: 20000, // 收入
           expenses: 10000, // 支出
-          thumbnail: 'https://pic.52112.com/180406/180406_191/yWco75ssT5_small.jpg', // 缩略图
+          image: 'https://pic.52112.com/180406/180406_191/yWco75ssT5_small.jpg', // 缩略图
           created: '2023-12-15', // 创建时间
           cratedBy: '李莹', // 创建人
           items: [] // 账本明细数据

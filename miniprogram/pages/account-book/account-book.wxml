@@ -14,8 +14,8 @@
         class="account-book-item" 
         data-id="{{item.id}}" 
         bindtap="handleEditClick">
-        <view class="item-thumbnail">
-          <image src="{{item.thumbnail}}" />
+        <view class="item-image">
+          <image src="{{item.image}}" />
         </view>
         <view class="item-content">
           <view class="item-name">{{item.name}}</view>
