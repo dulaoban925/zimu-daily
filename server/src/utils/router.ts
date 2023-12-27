@@ -105,7 +105,7 @@ const routeBeforeMiddleware = (
 }
 
 const routeHandlerDecorator = (
-  handler: (req: Request, res: Response) => any
+  handler: (params: any, req: Request, res: Response) => any
 ) => {
   return async (req: Request, res: Response) => {
     let result: any
@@ -117,7 +117,13 @@ const routeHandlerDecorator = (
       if (!handler) {
         throw new Error('路由处理函数未定义')
       }
-      result = await handler(req, res)
+      let params = {}
+      if (req.method === 'GET') {
+        params = req.query
+      } else {
+        params = req.body
+      }
+      result = await handler(params, req, res)
       console.log('res', result)
       result = returnSuccess(req, result)
     } catch (e) {

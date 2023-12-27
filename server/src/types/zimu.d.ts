@@ -14,6 +14,12 @@ declare namespace ZiMu {
   interface RouteDefine {
     path: string
     method?: 'get' | 'post' | 'put' | 'delete'
-    handler: (req: Request, res: Response) => void
+    handler: (params: any, req: Request, res: Response) => void
   }
+
+  type RouteServiceHandler = (
+    params: any,
+    req: Request,
+    res: Response
+  ) => Promise<any>
 }

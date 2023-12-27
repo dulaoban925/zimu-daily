@@ -12,8 +12,8 @@ const sequelize = new Sequelize({
   // model 定义相关
   define: {
     timestamps: true, // 是否启用时间戳，启用时会自动获取 createdAt 和 updateAt
-    createdAt: 'created', // 字段映射 createdAt -> created 后面是实际 model 字段
-    updatedAt: 'updated', // 字段映射 updatedAt -> updated 后面是实际 model 字段
+    underscored: true,
+    paranoid: true, // 启用软删除，启用后 deletedAt 字段会自动添加到 model 定义
   },
 })
 

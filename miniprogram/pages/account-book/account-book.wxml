@@ -67,4 +67,6 @@
   </van-dialog>
   <!-- 弹窗实例，用于 API 调用 -->
   <van-dialog id="van-dialog" />
+  <!-- 消息提示实例 -->
+  <van-notify id="van-notify" />
 </view>

@@ -1,18 +1,9 @@
 import { ACCOUNT_BOOK_TYPES } from "../../constants/data"
 import { navigateTo } from "../../utils/rotuer"
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
-import request from "../../utils/request"
-
-interface AccountBook {
-  id: string
-  name: string
-  type: string // 账本类别
-  incomes: number
-  expenses: number
-  image: string
-  created: string
-  cratedBy: string
-}
+import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
+import { AccountBook } from "./types"
+import { deleteById, insert, queryByPage } from "./apis"
 
 Page({
   options: {
@@ -37,7 +28,8 @@ Page({
     showAddTypes: false,
     // 新建账本-填写名称，在选择账本类型后触发
     showAbNameDialog: false,
-    _newAbTemp: {} as AccountBook
+    _newAbTemp: {} as AccountBook,
+    _page: 1, // 当前页
   },
 
   /**
@@ -91,11 +83,9 @@ Page({
 
   // 查询账本列表
   queryAccountBooks: async function (page = 1, pageSize = 10) {
-    console.log(page, pageSize)
-    const { data } = await request({
-      url: `/account-book/queryByPage?page=${page}&pageSize=${pageSize}`
-    })
+    const data = await queryByPage(page, pageSize)
     this.setData({
+      _page: page,
       accountBooks: data
     })
   },
@@ -119,16 +109,10 @@ Page({
   // 选择账本类型
   handleAccountBookTypeTap: function (e: WechatMiniprogram.BaseEvent) {
     const abType = e.currentTarget.dataset.type
-    const id = this.data.accountBooks.length === 0 ? '0' : (parseInt(this.data.accountBooks[this.data.accountBooks.length - 1].id) + 1).toString()
     const newItem = {
-      id,
       name: abType.label,
       type: abType.key,
-      incomes: 0, // 收入
-      expenses: 0, // 支出
       image: abType.image, // 缩略图
-      created: '2023-12-15', // 创建时间
-      cratedBy: '李莹' // 创建人
     }
     this.setData({
       _newAbTemp: newItem,
@@ -138,15 +122,23 @@ Page({
   },
 
   // 填写账本名称
-  handleAbNameConfirm: function (e: WechatMiniprogram.CustomEvent) {
+  handleAbNameConfirm: async function (e: WechatMiniprogram.CustomEvent) {
     const value = e.detail.value
     this.data._newAbTemp.name = value
-    this.data.accountBooks.unshift(this.data._newAbTemp)
-    this.setData({
-      accountBooks: this.data.accountBooks,
-      _newAbTemp: {}  as AccountBook,
-      showAbNameDialog: false
-    })
+    insert(this.data._newAbTemp)
+      .then(async () => {
+        Notify({type: 'success', message: '保存成功'})
+        // 刷新列表
+        await this.queryAccountBooks(this.data._page)
+        
+        this.setData({
+          _newAbTemp: {}  as AccountBook,
+          showAbNameDialog: false
+        })
+      })
+      .catch(e => {
+        Notify(`保存失败：${e.message}`)
+      })
   },
 
   // 关闭新建账本类型
@@ -162,15 +154,15 @@ Page({
       title: '警告',
       message: '确认删除该账本？',
     })
-      .then(() => {
+      .then(async () => {
         const id = e.currentTarget.dataset.id
-        const index = this.data.accountBooks.findIndex(ab => ab.id === id)
-        if (index > -1) {
-          this.data.accountBooks.splice(index, 1)
-          this.setData({
-            accountBooks: this.data.accountBooks
+        deleteById(id)
+          .then(() => {
+            Notify({ type: 'success', message: '删除成功' })
           })
-        }
+          .catch(e => {
+            Notify(`删除失败：${e.message}`)
+          }) 
       })
   }
 })

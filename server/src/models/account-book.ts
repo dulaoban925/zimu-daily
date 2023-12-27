@@ -3,8 +3,9 @@
  */
 import { DataTypes } from 'sequelize'
 import sequelize from '../db'
+import { AccountBookInstance } from 'business/account-book'
 
-const AccountBook = sequelize.define(
+const AccountBook = sequelize.define<AccountBookInstance>(
   'AccountBook',
   {
     id: {
@@ -19,23 +20,20 @@ const AccountBook = sequelize.define(
     type: DataTypes.STRING,
     // 账本标识图
     image: DataTypes.STRING,
+    // 总收入
+    incomes: DataTypes.VIRTUAL,
+    // 总支出
+    expenses: DataTypes.VIRTUAL,
     // 创建时间
     created: DataTypes.DATE,
     // 创建人
-    createdBy: {
-      type: DataTypes.STRING,
-      field: 'created_by',
-    },
+    createdBy: DataTypes.STRING,
     // 更新时间
     updated: DataTypes.DATE,
     // 更新人
-    updatedBy: {
-      type: DataTypes.STRING,
-      // 设置表字段，若不设置，则与表字段相同
-      field: 'updated_by',
-    },
-    // 删除标识
-    isDelete: DataTypes.STRING,
+    updatedBy: DataTypes.STRING,
+    // 删除时间，软删
+    deleteAt: DataTypes.DATE,
   },
   {
     tableName: 'account_book',

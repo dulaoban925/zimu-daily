@@ -1,78 +1,85 @@
-import { Request, Response } from 'express'
 import AccountBook from '../models/account-book'
 import { ZiMu } from 'zimu'
+import { REQUEST_PARAMS_ERROR_CODE, ZiMuError } from '@/utils/error'
+import { AccountBookInstance } from 'business/account-book'
 
-const queryByPage = async (req: Request) => {
-  const { page = 1, pageSize = 10 } = req.query as unknown as ZiMu.PageQuery
-  const accountBooks = await AccountBook.findAll({
+const queryByPage = async (params: ZiMu.PageQuery) => {
+  const { page = 1, pageSize = 10 } = params
+  const { count, rows } = await AccountBook.findAndCountAll({
     order: [['created', 'DESC']],
     limit: 10,
     offset: (page - 1) * pageSize,
   })
 
-  const count = await AccountBook.count()
+  rows.length &&
+    rows.map(async (row) => {
+      row.incomes = 0
+      row.expenses = 0
+      return row
+    })
 
   return {
     total: count,
     totalPages: Math.ceil(count / 10),
     page,
     pageSize,
-    data: accountBooks,
+    data: rows,
   }
 }
 
-const queryList = async (req: Request, res: Response) => {
-  const accountBooks = await AccountBook.findAll({
+const queryList = async () => {
+  const { count, rows } = await AccountBook.findAndCountAll({
     order: [['created', 'DESC']],
   })
-  res.send(accountBooks)
-}
 
-const insert = async (req: Request, res: Response) => {
-  const accountBook = await AccountBook.create(req.body)
-  res.send(accountBook)
-}
-
-const deleteById = async (req: Request, res: Response) => {
-  const id = req.body.id
-  if (!id) {
-    res.send(false)
-    return
+  return {
+    total: count,
+    data: rows,
   }
+}
+
+const insert = async (params: AccountBookInstance) => {
+  const accountBook = await AccountBook.create(params)
+
+  return accountBook
+}
+
+const deleteById = async (params: { id: string }) => {
+  const id = params.id
+  if (!id) throw new ZiMuError(REQUEST_PARAMS_ERROR_CODE, '参数 id 不存在')
   await AccountBook.destroy({
     where: {
       id,
     },
   })
-  res.send(true)
+
+  return true
 }
 
-const updateById = async (req: Request, res: Response) => {
-  const id = req.body.id
-  if (!id) {
-    res.send(false)
-    return
-  }
-  const accountBook = await AccountBook.update(req.body, {
+const updateById = async (params: AccountBookInstance) => {
+  const id = params.id
+  if (!id) throw new ZiMuError(REQUEST_PARAMS_ERROR_CODE, '参数 id 不存在')
+  await AccountBook.update(params, {
     where: {
       id,
     },
   })
-  res.send(`成功更新 ${accountBook[0]} 条`)
+
+  const accountBook = await queryById({ id })
+
+  return accountBook
 }
 
-const queryById = async (req: Request, res: Response) => {
-  const id = req.query.id
-  if (!id) {
-    res.send(false)
-    return
-  }
+const queryById = async (params: { id: string }) => {
+  const id = params.id
+  if (!id) throw new ZiMuError(REQUEST_PARAMS_ERROR_CODE, '参数 id 不存在')
   const accountBook = await AccountBook.findOne({
     where: {
       id,
     },
   })
-  res.send(accountBook)
+
+  return accountBook
 }
 
 export default {
