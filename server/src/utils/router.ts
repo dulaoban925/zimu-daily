@@ -124,7 +124,6 @@ const routeHandlerDecorator = (
         params = req.body
       }
       result = await handler(params, req, res)
-      console.log('res', result)
       result = returnSuccess(req, result)
     } catch (e) {
       result = returnFail(res, e as ZiMuError | Error)

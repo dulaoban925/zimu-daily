@@ -1,14 +1,8 @@
-import { ACCOUNT_BOOK_ITEM_INCOME_SOURCE, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE, ACCOUNT_BOOK_ITEM_TYPES, ACCOUNT_BOOK_ITEM_TYPE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_DESC } from "../../constants/data"
+import { ACCOUNT_BOOK_ITEM_TYPE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_DESC } from "../../constants/data"
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 import { navigateTo } from "../../utils/rotuer"
-
-interface AccountBookInfo {
-  header: any
-  items: {
-    month: string,
-    detail: any
-  }[]
-}
+import { queryById } from "./api"
+import { AccountBookInfo } from "./types"
 
 Page({
 
@@ -34,15 +28,12 @@ Page({
      *              transactionTime: '', // 交易时间
      *              parentId: '' // 目前行明细仅属于一条头信息，后续添加「共享」功能后，需设计中间表
      *            }
-     *          ] // 明细行   
-     *       } 
+     *          ] // 明细行
+     *       }
      *    ]
      * }
      */
-    info: {
-      header: {},
-      items: []
-    } as AccountBookInfo,
+    info: {} as AccountBookInfo,
     // 收支类型对象
     ieTypes: ACCOUNT_BOOK_ITEM_TYPE_DESC,
     // 收支用途描述汇总
@@ -93,7 +84,10 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    wx.stopPullDownRefresh()
+    this.queryInfo(this.data.info.id!)
+      .then(() => {
+        wx.stopPullDownRefresh()
+      })
   },
 
   /**
@@ -111,44 +105,11 @@ Page({
   },
 
   // 查询账本详情
-  queryInfo(id: string) {
+  async queryInfo(id: string) {
     console.log(id)
+    const data = await queryById(id)
     this.setData({
-      info: {
-        header: {
-          id: '1',
-          name: '账本1', // 账本名称
-          incomes: 20000, // 收入
-          expenses: 10000, // 支出
-          image: 'https://pic.52112.com/180406/180406_191/yWco75ssT5_small.jpg', // 缩略图
-          created: '2023-12-15', // 创建时间
-          cratedBy: '李莹', // 创建人
-          items: [] // 账本明细数据
-        },
-        items: [
-          {
-            month: '1',
-            detail: [
-              {
-                id: '0',
-                type: ACCOUNT_BOOK_ITEM_TYPES.INCOME,
-                source: ACCOUNT_BOOK_ITEM_INCOME_SOURCE.INCOME_SALARY,
-                amount: '20000',
-                comment: '收入备注',
-                parentId: '1'
-              },
-              {
-                id: '1',
-                type: ACCOUNT_BOOK_ITEM_TYPES.EXPENSE,
-                source: ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE.EXPENSE_RENT,
-                amount: '10000',
-                comment: '支出备注',
-                parentId: '1'
-              }
-            ]
-          }
-        ]
-      }
+      info: data
     })
   },
 

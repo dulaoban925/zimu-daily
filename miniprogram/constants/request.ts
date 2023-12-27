@@ -1,0 +1,1 @@
+export const ACCOUNT_BOOK_REQUEST_PATH_PREFIX = '/account-book'

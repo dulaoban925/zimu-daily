@@ -1,11 +1,11 @@
 {
-  "name": "miniprogram-ts-less-quickstart",
+  "name": "zimu-housekeeper",
   "version": "1.0.0",
-  "description": "",
+  "description": "梓沐私人管家小程序",
   "scripts": {},
   "keywords": [],
-  "author": "",
-  "license": "",
+  "author": "SuperYing",
+  "license": "MIT",
   "dependencies": {
     "@vant/weapp": "^1.11.2"
   },

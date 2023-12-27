@@ -11,7 +11,7 @@ const sequelize = new Sequelize({
   logging: console.log, // 日志打印方式
   // model 定义相关
   define: {
-    timestamps: true, // 是否启用时间戳，启用时会自动获取 createdAt 和 updateAt
+    timestamps: true, // 是否启用时间戳，启用时会自动获取 createdAt 和 updatedAt
     underscored: true,
     paranoid: true, // 启用软删除，启用后 deletedAt 字段会自动添加到 model 定义
   },

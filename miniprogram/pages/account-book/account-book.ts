@@ -50,7 +50,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    
+
   },
 
   /**
@@ -71,7 +71,10 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-
+    this.queryAccountBooks(this.data._page)
+      .then(() => {
+        wx.stopPullDownRefresh()
+      })
   },
 
   /**
@@ -130,7 +133,7 @@ Page({
         Notify({type: 'success', message: '保存成功'})
         // 刷新列表
         await this.queryAccountBooks(this.data._page)
-        
+
         this.setData({
           _newAbTemp: {}  as AccountBook,
           showAbNameDialog: false
@@ -162,7 +165,7 @@ Page({
           })
           .catch(e => {
             Notify(`删除失败：${e.message}`)
-          }) 
+          })
       })
   }
 })

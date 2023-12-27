@@ -7,11 +7,11 @@ interface AccountBookAttributes {
   image: string
   incomes: number
   expenses: number
-  created: string
+  createdAt: string
   createdBy: string
-  updated: string
+  updatedAt: string
   updatedBy: string
-  deleteAt: string
+  deletedAt: string
 }
 
 /**

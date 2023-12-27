@@ -1,0 +1,5 @@
+{"level":"error","message":"Unknown column 'AccountBook.deleted_at' in 'where clause'"}
+{"level":"error","message":"Unknown column 'created' in 'field list'"}
+{"level":"error","message":"Unknown column 'created' in 'field list'"}
+{"level":"error","message":"Unknown column 'created' in 'field list'"}
+{"level":"error","message":"Unknown column 'delete_at' in 'field list'"}

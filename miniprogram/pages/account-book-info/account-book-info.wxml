@@ -2,22 +2,22 @@
   账本明细列表页面
 -->
 <view class="account-book-info page-container">
-  <view class="info-header" style="background-image: {{info.header.image}};">
-    <text>收入：<text style="color: #4eae70; font-weight: bold; padding-right: 40rpx;">{{info.header.incomes}}</text></text>
-    <text>支出：<text style="color: #ec3323; font-weight: bold;">{{info.header.expenses}}</text></text>
+  <view class="info-header" style="background-image: {{info.image}};">
+    <text>收入：￥<text style="color: #4eae70; font-weight: bold; padding-right: 40rpx;">{{info.incomes}}</text></text>
+    <text>支出：￥<text style="color: #ec3323; font-weight: bold;">{{info.expenses}}</text></text>
   </view>
   <van-empty wx:if="{{info.items.length === 0}}" description="暂无明细" />
   <block wx:else>
     <view class="info-items" wx:for="{{info.items}}" wx:key="month">
       <view class="month-header">{{item.month}}月</view>
-      <van-swipe-cell 
+      <van-swipe-cell
         class="swipe-cell"
-        wx:for="{{item.detail}}" 
-        wx:key="id" 
+        wx:for="{{item.detail}}"
+        wx:key="id"
         wx:for-item="detailItem"
         right-width="{{ 65 }}"
         name="{{detailItem.id}}">
-        <view 
+        <view
           class="month-item"
           data-id="{{detailItem.id}}"
           bind:tap="handleEditDetailItem">
@@ -27,10 +27,10 @@
           </view>
           <view class="item-comment">{{detailItem.comment}}</view>
         </view>
-        <van-button 
-          slot="right" 
-          type="danger" 
-          square 
+        <van-button
+          slot="right"
+          type="danger"
+          square
           custom-style="height: 100%;"
           data-id="{{ item.id }}"
           bind:click="handleDeleteDetailItem">删除</van-button>
