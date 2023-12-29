@@ -2,3 +2,4 @@
 /miniprogram/miniprogram_npm
 /server/node_modules
 /server/dist
+/server/debug.log

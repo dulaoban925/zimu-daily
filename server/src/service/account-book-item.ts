@@ -2,40 +2,39 @@ import AccountBookItem from '../models/account-book-item'
 import { REQUEST_PARAMS_ERROR_CODE, ZiMuError } from '../utils/error'
 import {
   AccountBookItemInstance,
-  QueryParams,
-} from 'business/account-book-item'
-import logger from '../utils/logger'
+  AccountBookItemQueryParams,
+  RelationAccountBookItemAttributes,
+} from 'business/account-book'
+import RelationAccountBookItem from '../models/relation-account-book-item'
+import { v4 as uuidV4 } from 'uuid'
 
-const queryByPage = async (params: QueryParams = { page: 1, pageSize: 10 }) => {
-  try {
-    const { page, pageSize } = params
-    const where: any = {}
-    for (const [key, value] of Object.entries(params)) {
-      if (!['page', 'pageSize'].includes(key)) {
-        where[key] = value
-      }
+const queryByPage = async (
+  params: AccountBookItemQueryParams = { page: 1, pageSize: 10 }
+) => {
+  const { page, pageSize } = params
+  const where: any = {}
+  for (const [key, value] of Object.entries(params)) {
+    if (!['page', 'pageSize'].includes(key)) {
+      where[key] = value
     }
-    const { count, rows } = await AccountBookItem.findAndCountAll({
-      order: [['createdAt', 'DESC']],
-      limit: 10,
-      offset: (page - 1) * pageSize,
-      where,
-    })
+  }
+  const { count, rows } = await AccountBookItem.findAndCountAll({
+    order: [['createdAt', 'DESC']],
+    limit: 10,
+    offset: (page - 1) * pageSize,
+    where,
+  })
 
-    return {
-      total: count,
-      totalPages: Math.ceil(count / 10),
-      page,
-      pageSize,
-      data: rows,
-    }
-  } catch (e: any) {
-    logger.error(e.message)
-    throw new Error(e.message)
+  return {
+    total: count,
+    totalPages: Math.ceil(count / 10),
+    page,
+    pageSize,
+    data: rows,
   }
 }
 
-const queryList = async (params: QueryParams) => {
+const queryList = async (params: AccountBookItemQueryParams) => {
   const where = {}
   if (params) {
     Object.assign(where, params)
@@ -54,6 +53,20 @@ const queryList = async (params: QueryParams) => {
 const insert = async (params: AccountBookItemInstance) => {
   const accountBookItem = await AccountBookItem.create(params)
 
+  const relatedIds = new Set((params.relatedIds ?? []).concat(params.parentId))
+
+  const relations: RelationAccountBookItemAttributes[] = Array.from(
+    relatedIds
+  ).map((id: string) => ({
+    id: uuidV4(),
+    accountBookId: id,
+    accountBookItemId: params.id,
+    createdBy: 'admin',
+    updatedBy: 'admin',
+  }))
+
+  await RelationAccountBookItem.bulkCreate(relations)
+
   return accountBookItem
 }
 
@@ -63,6 +76,12 @@ const deleteById = async (params: { id: string }) => {
   await AccountBookItem.destroy({
     where: {
       id,
+    },
+  })
+
+  await RelationAccountBookItem.destroy({
+    where: {
+      accountBookItemId: id,
     },
   })
 
@@ -84,20 +103,15 @@ const updateById = async (params: AccountBookItemInstance) => {
 }
 
 const queryById = async (params: { id: string }) => {
-  try {
-    const id = params.id
-    if (!id) throw new ZiMuError(REQUEST_PARAMS_ERROR_CODE, '参数 id 不存在')
-    const accountBookItem = await AccountBookItem.findOne({
-      where: {
-        id,
-      },
-    })
+  const id = params.id
+  if (!id) throw new ZiMuError(REQUEST_PARAMS_ERROR_CODE, '参数 id 不存在')
+  const accountBookItem = await AccountBookItem.findOne({
+    where: {
+      id,
+    },
+  })
 
-    return accountBookItem
-  } catch (e: any) {
-    logger.error(e.message)
-    throw new Error(e.message)
-  }
+  return accountBookItem
 }
 
 export default {

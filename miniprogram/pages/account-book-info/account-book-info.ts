@@ -1,8 +1,11 @@
+import dayjs from "dayjs"
 import { ACCOUNT_BOOK_ITEM_TYPE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_DESC } from "../../constants/data"
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
+import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import { navigateTo } from "../../utils/rotuer"
-import { queryById } from "./api"
+import { deleteById, queryAccountBookById } from "./api"
 import { AccountBookInfo } from "./types"
+import { AccountBookItem } from "../account-book-info-item/types"
 
 Page({
 
@@ -14,9 +17,10 @@ Page({
      * 账本详情数据
      * 数据结构：
      * {
-     *    header: {}, // 头信息
+     *    {...header}, // 头信息
      *    items: [
      *       {
+     *          year: '', // 所属年份
      *          month: '', // 所属月份
      *          detail: [
      *            {
@@ -45,7 +49,6 @@ Page({
    */
   onLoad(query) {
     // 编辑状态，会在 query 中传递 id，以获取详情数据
-    console.log('query', query)
     if (query.id) {
       // 查询账本详情
       this.queryInfo(query.id)
@@ -107,16 +110,45 @@ Page({
   // 查询账本详情
   async queryInfo(id: string) {
     console.log(id)
-    const data = await queryById(id)
+    const data = await queryAccountBookById(id)
     this.setData({
-      info: data
+      info: this._formatItemInfo(data)
     })
+  },
+
+  // 格式化明细数据，将明细数据按照交易月份分组
+  _formatItemInfo(data: any) {
+    const result = {
+      ...data
+    }
+    const transactionMap = new Map()
+    // 按照交易日期降序排列
+    result.items.sort((pre: AccountBookItem, next: AccountBookItem) => dayjs(pre.transactionTime).isBefore(next.transactionTime) ? 1 : -1)
+
+    for (let item of result.items) {
+      const mapKey = dayjs(item.transactionTime).format('YYYY-MM')
+      if (!transactionMap.has(mapKey)) {
+        transactionMap.set(mapKey, [])
+      }
+      const existMapItems = transactionMap.get(mapKey)
+      existMapItems.push(item)
+    }
+
+    result.items = [...transactionMap.entries()].map(([key, value]) => {
+      const [year, month] = key.split('-')
+      return {
+        year,
+        month,
+        detail: value
+      }
+    })
+    return result
   },
 
   // 新增按钮
   handleAddClick() {
     navigateTo({
-      url: '/pages/account-book-info-item/account-book-info-item'
+      url: `/pages/account-book-info-item/account-book-info-item?parentId=${this.data.info.id}`
     })
   },
 
@@ -136,6 +168,14 @@ Page({
     })
       .then(() => {
         const id = e.currentTarget.dataset.id
+        deleteById(id)
+          .then(() => {
+            Notify({ type: 'success', message: '删除成功' })
+            this.queryInfo(this.data.info.id!)
+          })
+          .catch(e => {
+            Notify(`删除失败:${e.message}`)
+          })
       })
   }
 })

@@ -30,6 +30,7 @@ Page({
     showAbNameDialog: false,
     _newAbTemp: {} as AccountBook,
     _page: 1, // 当前页
+    _pageSize: 10 // 每页数据量
   },
 
   /**
@@ -81,7 +82,14 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
+    const {accountBooks, _page, _pageSize} = this.data
+    if (accountBooks.length < _pageSize) return
 
+    const nextPage = _page + 1
+    this.queryAccountBooks(nextPage)
+    this.setData({
+      _page: nextPage
+    })
   },
 
   // 查询账本列表
@@ -162,6 +170,7 @@ Page({
         deleteById(id)
           .then(() => {
             Notify({ type: 'success', message: '删除成功' })
+            this.queryAccountBooks(this.data._page)
           })
           .catch(e => {
             Notify(`删除失败：${e.message}`)

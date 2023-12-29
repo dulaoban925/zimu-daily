@@ -1,33 +1,23 @@
-<!--
-  账簿明细页面
--->
+<!-- 账簿明细页面 -->
 <view class="account-book-info-item page-container">
   <view class="item-amount cell">
     <view class="label">交易金额</view>
-    <view class="amount-input">￥
-      <input placeholder="0.00" />
+    <view class="amount-input">
+      ￥
+      <input value="{{itemInfo.amount}}" placeholder="0.00" data-field="amount" bindinput="handleInput" />
     </view>
   </view>
   <view class="item-type cell">
     <view class="ie-types">
-      <van-button 
-        type="{{ itemInfo.type === itemTypes.INCOME ? 'primary' : 'default'}}" 
-        size="small"
-        round
-        data-type="{{itemTypes.INCOME}}"
-        bind:click="handleTypeClick">收入</van-button>
-      <van-button 
-        type="{{ itemInfo.type === itemTypes.EXPENSE ? 'primary' : 'default'}}" 
-        size="small"
-        round
-        data-type="{{itemTypes.EXPENSE}}"
-        bind:click="handleTypeClick">支出</van-button>
+      <van-button type="{{ itemInfo.type === itemTypes.INCOME ? 'primary' : 'default'}}" size="small" round data-type="{{itemTypes.INCOME}}" bind:click="handleTypeClick">
+        收入
+      </van-button>
+      <van-button type="{{ itemInfo.type === itemTypes.EXPENSE ? 'primary' : 'default'}}" size="small" round data-type="{{itemTypes.EXPENSE}}" bind:click="handleTypeClick">
+        支出
+      </van-button>
     </view>
     <view class="item-source">
-      <view 
-        class="source-content {{itemInfo.soruce === key ? 'active' : ''}}"
-        wx:for="{{itemInfo.type === itemTypes.INCOME ? incomeSourceArray : expenseSourceArray}}"
-        wx:key="key">
+      <view class="source-content {{itemInfo.soruce === key ? 'active' : ''}}" wx:for="{{itemInfo.type === itemTypes.INCOME ? incomeSourceArray : expenseSourceArray}}" wx:key="key" data-souce="{{item.key}}" bind:tap="handleSourceClick">
         <van-icon name="{{item.icon}}" size="50rpx" />
         <view class="source-label">{{item.label}}</view>
       </view>
@@ -35,10 +25,12 @@
   </view>
   <view class="item-comment cell">
     <view class="label">备注</view>
-    <textarea auto-height placeholder="记录点什么..." />
+    <textarea value="{{itemInfo.comment}}" auto-height placeholder="记录点什么..." data-field="comment" bindinput="handleInput" />
   </view>
   <view class="bottom-buttons cell">
     <text class="text-button">再记一笔</text>
-    <van-button type="primary" round>确定添加</van-button>
+    <van-button type="primary" round bind:click="handleAddClick">确定添加</van-button>
   </view>
+  <!-- 消息提示实例 -->
+  <van-notify id="van-notify" />
 </view>

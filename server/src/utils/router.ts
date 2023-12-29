@@ -2,19 +2,16 @@ import express, { NextFunction, Request, Response } from 'express'
 import { ZiMu } from 'zimu'
 import { v4 as uuidV4 } from 'uuid'
 import { ZiMuError } from './error'
+import logger from './logger'
 
-interface SuccessResult {
+interface ResponseResult {
   code: number
   data: any
   total?: number // 总数据量
   totalPages?: number // 总页数
   page?: number // 当前页
   pageSize?: number // 当前页数据量
-}
-
-interface FailResult {
-  code: number
-  message: string
+  message?: string // 错误信息
 }
 
 const SUCCESS_CODE = 200
@@ -34,7 +31,7 @@ const isQueryList = (req: Request) =>
   req.method === 'GET' && req.path.endsWith('List')
 
 const returnSuccess = (req: Request, data: any) => {
-  const result: SuccessResult = {
+  const result: ResponseResult = {
     code: SUCCESS_CODE,
     data: [],
   }
@@ -68,16 +65,20 @@ const returnSuccess = (req: Request, data: any) => {
 }
 
 const returnFail = (res: Response, e: ZiMuError | Error) => {
-  let result: FailResult
+  let result: ResponseResult
+  // 记录错误日志
+  logger.error(e.message)
   if (e instanceof ZiMuError) {
     result = {
       code: e.code,
       message: e.message,
+      data: null,
     }
   } else {
     result = {
       code: SERVER_ERROR_CODE,
       message: '服务器内部错误',
+      data: null,
     }
   }
 

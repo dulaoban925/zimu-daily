@@ -7,7 +7,8 @@
   "author": "SuperYing",
   "license": "MIT",
   "dependencies": {
-    "@vant/weapp": "^1.11.2"
+    "@vant/weapp": "^1.11.2",
+    "dayjs": "^1.11.10"
   },
   "devDependencies": {
     "miniprogram-api-typings": "^2.8.3-1"

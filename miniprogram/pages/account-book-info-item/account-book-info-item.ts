@@ -1,4 +1,8 @@
 import { ACCOUNT_BOOK_ITEM_TYPES, ACCOUNT_BOOK_ITEM_INCOME_SOURCE, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE, ACCOUNT_BOOK_ITEM_INCOME_SOURCE_DESC, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON } from '../../constants/data'
+import { insert, queryById } from './api'
+import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
+import { AccountBookItem } from './types'
+import dayjs from 'dayjs'
 
 // type 和 source 默认选中映射
 const DefaultTypeSourceMap = {
@@ -28,7 +32,8 @@ Page({
     // 明细信息对象
     itemInfo: {
       type: ACCOUNT_BOOK_ITEM_TYPES.INCOME,
-      source: ACCOUNT_BOOK_ITEM_INCOME_SOURCE.INCOME_SALARY
+      source: ACCOUNT_BOOK_ITEM_INCOME_SOURCE.INCOME_SALARY,
+      transactionTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
     },
     // 收支类型
     itemTypes: ACCOUNT_BOOK_ITEM_TYPES,
@@ -45,8 +50,17 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad() {
-
+  onLoad(query) {
+    // 新建明细，传递 parentId
+    if (query.parentId) {
+      this.setData({
+        'itemInfo.parentId': query.parentId,
+      })
+    }
+    // 编辑/查看明细，传递 id
+    if (query.id) {
+      this.queryAccountBookInfoItem(query.id)
+    }
   },
 
   /**
@@ -98,6 +112,29 @@ Page({
 
   },
 
+  // 查询明细
+  queryAccountBookInfoItem(id: string) {
+    queryById(id)
+      .then((data) => {
+        this.setData({
+          itemInfo: data
+        })
+      })
+      .catch(e => {
+        Notify(`数据获取失败:${e.message}`)
+      })
+  },
+
+  // 输入金额
+  handleInput(e: WechatMiniprogram.CustomEvent) {
+    const field = e.currentTarget.dataset.field
+    const value = e.detail.value
+    console.log(field, value)
+    this.setData({
+      [`itemInfo.${field}`]: value
+    })
+  },
+
   // 切换类型
   handleTypeClick(e: WechatMiniprogram.BaseEvent) {
     const type = e.currentTarget.dataset.type
@@ -106,5 +143,28 @@ Page({
       'itemInfo.type': type,
       'itemInfo.source': DefaultTypeSourceMap[type]
     })
+  },
+
+  // 切换交易用途
+  handleSourceClick(e: WechatMiniprogram.BaseEvent) {
+    const source = e.currentTarget.dataset.source
+    if (this.data.itemInfo.source === source) return
+    this.setData({
+      'itemInfo.source': source
+    })
+  },
+
+  // 确认添加
+  handleAddClick() {
+    insert(this.data.itemInfo as AccountBookItem)
+      .then((data) => {
+        Notify({ type: 'success', message: '添加成功'})
+        this.setData({
+          itemInfo: data
+        })
+      })
+      .catch(e => {
+        Notify(`添加失败:${e.message}`)
+      })
   }
 })

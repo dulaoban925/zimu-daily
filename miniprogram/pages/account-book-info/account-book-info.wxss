@@ -20,14 +20,25 @@
   border-radius: 20rpx;
 }
 
+.item-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
 .item-source {
   font-size: 38rpx;
   font-weight: bold;
   line-height: 38rpx;
 }
 
+.item-transaction-time {
+  font-size: 30rpx;
+  color: var(--color-gray-7);
+}
+
 .item-amount {
-  line-height: 60rpx;
+  line-height: 80rpx;
 }
 
 .item-comment {

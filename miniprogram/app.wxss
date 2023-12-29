@@ -1,3 +1,5 @@
+@import './miniprogram_npm/@vant/weapp/common/index.wxss';
+
 page {
   --common-padding-margin: 20rpx;
   --color-white: #ffffff;

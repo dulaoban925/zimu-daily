@@ -1,13 +1,12 @@
 export class ZiMuError extends Error {
-  name: string
   code: number
-  message: string
 
   constructor(code: number, message: string) {
     super(message)
     this.code = code
     this.message = message
     this.name = 'ZiMuError'
+    console.log(this)
   }
 }
 

@@ -6,7 +6,7 @@ const baseUrl = 'http://localhost:3000'
 
 export default function request(options: WechatMiniprogram.RequestOption): Promise<{
   code: number
-  data: any[]
+  data: any
   total?: number
   totalPages?: number
   page?: number
@@ -25,7 +25,7 @@ export default function request(options: WechatMiniprogram.RequestOption): Promi
       if (res.data.code !== 200) return reject(res.data)
       return resolve(res.data)
     }
-  
+
     const fail: WechatMiniprogram.RequestFailCallback = (err) => {
       if (options.fail) options.fail(err)
       return reject(err)

@@ -1,39 +1,36 @@
-<!--
-  账本明细列表页面
--->
+<!-- 账本明细列表页面 -->
 <view class="account-book-info page-container">
   <view class="info-header" style="background-image: {{info.image}};">
-    <text>收入：￥<text style="color: #4eae70; font-weight: bold; padding-right: 40rpx;">{{info.incomes}}</text></text>
-    <text>支出：￥<text style="color: #ec3323; font-weight: bold;">{{info.expenses}}</text></text>
+    <span>
+      收入：￥
+      <text style="color: #4eae70; font-weight: bold; padding-right: 40rpx;">{{info.incomes}}</text>
+    </span>
+    <span>
+      支出：￥
+      <text style="color: #ec3323; font-weight: bold;">{{info.expenses}}</text>
+    </span>
   </view>
   <van-empty wx:if="{{info.items.length === 0}}" description="暂无明细" />
   <block wx:else>
     <view class="info-items" wx:for="{{info.items}}" wx:key="month">
       <view class="month-header">{{item.month}}月</view>
-      <van-swipe-cell
-        class="swipe-cell"
-        wx:for="{{item.detail}}"
-        wx:key="id"
-        wx:for-item="detailItem"
-        right-width="{{ 65 }}"
-        name="{{detailItem.id}}">
-        <view
-          class="month-item"
-          data-id="{{detailItem.id}}"
-          bind:tap="handleEditDetailItem">
-          <view class="item-source">{{ieSources[detailItem.source]}}</view>
+      <van-swipe-cell class="swipe-cell" wx:for="{{item.detail}}" wx:key="id" wx:for-item="detailItem" right-width="{{ 65 }}" name="{{detailItem.id}}">
+        <view class="month-item" data-id="{{detailItem.id}}" bind:tap="handleEditDetailItem">
+          <view class="item-title">
+            <text class="item-source">{{ieSources[detailItem.source]}}</text>
+            <text class="item-transaction-time">{{detailItem.transactionTime}}</text>
+          </view>
           <view class="item-amount">
-            <text>{{ieTypes[detailItem.type]}}: <text style="color: {{ detailItem.type === 'income' ? '#4eae70' : '#ec3323'}}; font-weight: bold; padding-right: 40rpx;">￥{{detailItem.amount}}</text></text>
+            {{ieTypes[detailItem.type]}}: ￥
+            <span style="color: {{ detailItem.type === 'income' ? '#4eae70' : '#ec3323'}}; font-weight: bold; padding-right: 40rpx;">
+              {{detailItem.amount}}
+            </span>
           </view>
           <view class="item-comment">{{detailItem.comment}}</view>
         </view>
-        <van-button
-          slot="right"
-          type="danger"
-          square
-          custom-style="height: 100%;"
-          data-id="{{ item.id }}"
-          bind:click="handleDeleteDetailItem">删除</van-button>
+        <van-button slot="right" type="danger" square custom-style="height: 100%;" data-id="{{ detailItem.id }}" bind:click="handleDeleteDetailItem">
+          删除
+        </van-button>
       </van-swipe-cell>
     </view>
   </block>
@@ -41,4 +38,6 @@
   <van-button class="add-button" icon="plus" type="info" round bind:click="handleAddClick" />
   <!-- 弹窗实例，用于 API 调用 -->
   <van-dialog id="van-dialog" />
+  <!-- 消息提示实例 -->
+  <van-notify id="van-notify" />
 </view>
