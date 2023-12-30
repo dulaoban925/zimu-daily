@@ -35,7 +35,7 @@ export const ACCOUNT_BOOK_ITEM_TYPE_DESC = {
  * 账本明细用途
  * 收入：
  * 1.工资
- * 
+ *
  * 支出：
  * 1.房租
  */
@@ -63,4 +63,11 @@ export const ACCOUNT_BOOK_ITEM_IE_SOURCE_DESC = Object.assign({}, ACCOUNT_BOOK_I
 export const ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON = {
   [ACCOUNT_BOOK_ITEM_IE_SOURCE.INCOME_SALARY]: 'balance-o',
   [ACCOUNT_BOOK_ITEM_IE_SOURCE.EXPENSE_RENT]: 'home-o'
+}
+
+// 页面操作
+export const PAGE_OPERATION = {
+  NEW: 'new',
+  EDIT: 'edit',
+  VIEW: 'view'
 }

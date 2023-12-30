@@ -29,7 +29,9 @@
   </view>
   <view class="bottom-buttons cell">
     <text class="text-button">再记一笔</text>
-    <van-button type="primary" round bind:click="handleAddClick">确定添加</van-button>
+    <van-button type="primary" round bind:click="handleConfirmClick">
+      确定{{operation === 'new' ? '添加' : '保存'}}
+    </van-button>
   </view>
   <!-- 消息提示实例 -->
   <van-notify id="van-notify" />

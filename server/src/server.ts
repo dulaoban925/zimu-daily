@@ -1,4 +1,5 @@
 import app from './app'
+import ip from 'ip'
 
 const listenPort = app.get('port')
 
@@ -7,8 +8,8 @@ const listenPort = app.get('port')
  */
 app.listen(listenPort, () => {
   console.log(
-    '  App is running at http://localhost:%d in %s mode',
-    app.get('port'),
-    app.get('env')
+    `  App is running at http://${ip.address()}:${app.get('port')} in
+    ${app.get('env')} mode`
   )
+  console.log('  Press CTRL-C to stop\n')
 })

@@ -48,6 +48,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(query) {
+    console.log('onLoad')
     // 编辑状态，会在 query 中传递 id，以获取详情数据
     if (query.id) {
       // 查询账本详情
@@ -66,7 +67,8 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    console.log('onShow')
+    this.data.info.id && this.queryInfo(this.data.info.id)
   },
 
   /**

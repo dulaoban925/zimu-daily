@@ -12,6 +12,7 @@ declare global {
   namespace NodeJS {
     interface ProcessEnv {
       PROT: string
+      HTTP_HOST: string
       NODE_ENV: string
     }
   }

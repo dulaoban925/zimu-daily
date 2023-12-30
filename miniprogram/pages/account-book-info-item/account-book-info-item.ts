@@ -1,5 +1,5 @@
-import { ACCOUNT_BOOK_ITEM_TYPES, ACCOUNT_BOOK_ITEM_INCOME_SOURCE, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE, ACCOUNT_BOOK_ITEM_INCOME_SOURCE_DESC, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON } from '../../constants/data'
-import { insert, queryById } from './api'
+import { ACCOUNT_BOOK_ITEM_TYPES, ACCOUNT_BOOK_ITEM_INCOME_SOURCE, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE, ACCOUNT_BOOK_ITEM_INCOME_SOURCE_DESC, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON, PAGE_OPERATION } from '../../constants/data'
+import { insert, queryById, updateById } from './api'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import { AccountBookItem } from './types'
 import dayjs from 'dayjs'
@@ -44,7 +44,9 @@ Page({
     // 收入来源数组
     incomeSourceArray: IncomeSourceArray,
     // 支出用途数组
-    expenseSourceArray: ExpenseSourceArray
+    expenseSourceArray: ExpenseSourceArray,
+    // 当前操作
+    operation: PAGE_OPERATION.NEW // 默认新建
   },
 
   /**
@@ -59,6 +61,9 @@ Page({
     }
     // 编辑/查看明细，传递 id
     if (query.id) {
+      this.setData({
+        operation: PAGE_OPERATION.EDIT
+      })
       this.queryAccountBookInfoItem(query.id)
     }
   },
@@ -155,8 +160,9 @@ Page({
   },
 
   // 确认添加
-  handleAddClick() {
-    insert(this.data.itemInfo as AccountBookItem)
+  handleConfirmClick() {
+    const fn = this.data.operation === PAGE_OPERATION.NEW ? insert : updateById
+    fn(this.data.itemInfo as AccountBookItem)
       .then((data) => {
         Notify({ type: 'success', message: '添加成功'})
         this.setData({

@@ -7,8 +7,9 @@ import './db'
 
 const app = express()
 
+console.log(process.env.PROT)
 // 设置启动端口
-app.set('port', process.env.PROT || 3000)
+app.set('port', process.env.PORT)
 
 // body 解析
 app.use(bodyParser.json())
