@@ -1,5 +1,6 @@
 .info-header {
   width: 100%;
+  box-sizing: border-box;
   padding: 40rpx 20rpx 10rpx 20rpx;
   background: no-repeat right/100% url(https://pic.52112.com/180406/180406_191/yWco75ssT5_small.jpg);
 }

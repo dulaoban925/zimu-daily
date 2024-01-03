@@ -6,7 +6,7 @@ const config = {
   port: 3306,
   username: 'root',
   password: 'admin0125',
-  database: 'zimuhousekeeper',
+  database: 'zimudaily',
 }
 
 export default config

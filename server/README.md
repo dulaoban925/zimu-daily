@@ -1,4 +1,4 @@
-# zimu-housekeeper-server
+# zimu-daily-server
 
 **梓沐私人管家小程序**后端服务
 
