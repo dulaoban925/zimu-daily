@@ -2,6 +2,8 @@
 
 page {
   --common-padding-margin: 20rpx;
+  --color-primary: #3a8af2;
+  --color-warn: #f29c73;
   --color-white: #ffffff;
   --color-gray-1: #f7f8fa;
   --color-gray-2: #f2f3f5;
@@ -11,6 +13,10 @@ page {
   --color-gray-6: #969799;
   --color-gray-7: #646566;
   --color-gray-8: #323233;
+  --font-size-small: 20rpx;
+  --font-size-default: 28rpx;
+  --font-size-large: 34rpx;
+  --font-size-larger: 60rpx;
 }
 
 .page-container {

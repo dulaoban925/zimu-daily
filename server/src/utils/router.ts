@@ -118,9 +118,13 @@ const routeHandlerDecorator = (
       if (!handler) {
         throw new Error('路由处理函数未定义')
       }
-      let params = {}
+      let params: any = {}
       if (req.method === 'GET') {
         params = req.query
+        if (isQueryByPage(req)) {
+          params.page = parseInt(req.query.page as string, 10) || 1
+          params.pageSize = parseInt(req.query.pageSize as string, 10) || 10
+        }
       } else {
         params = req.body
       }

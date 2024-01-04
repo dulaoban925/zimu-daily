@@ -3,7 +3,8 @@
     "pages/index/index",
     "pages/account-book/account-book",
     "pages/account-book-info/account-book-info",
-    "pages/account-book-info-item/account-book-info-item"
+    "pages/account-book-info-item/account-book-info-item",
+    "pages/reminder/reminder"
   ],
   "window": {
     "navigationBarTitleText": "梓沐私人管家"
@@ -27,6 +28,9 @@
     "van-grid": "@vant/weapp/grid/index",
     "van-grid-item": "@vant/weapp/grid-item/index",
     "van-icon": "@vant/weapp/icon/index",
-    "van-notify": "@vant/weapp/notify/index"
+    "van-notify": "@vant/weapp/notify/index",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-row": "@vant/weapp/row/index",
+    "van-col": "@vant/weapp/col/index"
   }
 }

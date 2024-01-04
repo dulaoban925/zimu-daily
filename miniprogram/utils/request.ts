@@ -20,6 +20,7 @@ export default function request(options: WechatMiniprogram.RequestOption): Promi
   return new Promise((resolve, reject) => {
 
     const success: WechatMiniprogram.RequestSuccessCallback = (res: any) => {
+      console.log('success')
       if (options.success) options.success(res)
       // 后端错误，非 200 即为报错
       if (res.data.code !== 200) return reject(res.data)
@@ -27,12 +28,10 @@ export default function request(options: WechatMiniprogram.RequestOption): Promi
     }
 
     const fail: WechatMiniprogram.RequestFailCallback = (err) => {
+      console.log('err')
       if (options.fail) options.fail(err)
       return reject(err)
     }
-
-    delete options.success
-    delete options.fail
 
     wx.request({
       ...options,

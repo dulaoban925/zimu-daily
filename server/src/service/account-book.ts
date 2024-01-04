@@ -16,7 +16,7 @@ const queryByPage = async (params: ZiMu.PageQuery) => {
   const { page = 1, pageSize = 10 } = params
   const { count, rows } = await AccountBook.findAndCountAll({
     order: [['createdAt', 'DESC']],
-    limit: 10,
+    limit: pageSize,
     offset: (page - 1) * pageSize,
   })
 
@@ -28,7 +28,7 @@ const queryByPage = async (params: ZiMu.PageQuery) => {
 
   return {
     total: count,
-    totalPages: Math.ceil(count / 10),
+    totalPages: Math.ceil(count / pageSize),
     page,
     pageSize,
     data: rows,

@@ -1,0 +1,73 @@
+<!--提醒-->
+<view class="reminder page-container">
+  <view class="reminder-summary">
+    <view class="summary-first-line">
+      <view class="summary-block half">
+        <view class="summary-block-static">
+          <van-icon size="28" custom-style="color: var(--color-primary);" name="clock" />
+          <text>今天</text>
+        </view>
+        <text class="summary-num">0</text>
+      </view>
+      <view class="summary-block half">
+        <view class="summary-block-static">
+          <van-icon size="28" custom-style="color: var(--color-warn);" name="todo-list" />
+          <text>计划</text>
+        </view>
+        <text class="summary-num">0</text>
+      </view>
+    </view>
+    <view class="summary-block full">
+      <view class="summary-block-static">
+        <van-icon size="28" custom-style="color: var(--color-gray-7);" name="send-gift" />
+        <text>全部</text>
+      </view>
+      <text class="summary-num">0</text>
+    </view>
+  </view>
+  <view class="reminder-list">
+    <view class="list-title">
+      <text>我的列表</text>
+      <van-icon size="25" name="add" bind:tap="handleAddTap" />
+    </view>
+    <van-empty wx:if="{{reminders.length === 0}}" description="暂无数据" />
+    <scroll-view 
+      wx:else 
+      scroll-y 
+      enable-back-to-top
+      refresher-enabled
+      refresher-triggered="{{refresherTriggered}}"
+      class="list-scroll-view"
+      bindrefresherrefresh="handleRefresherRefresh"
+      bindscrolltolower="handleScrollToLower">
+      <van-swipe-cell 
+        class="reminder-item-cell" 
+        wx:for="{{reminders}}" 
+        wx:key="id" 
+        right-width="{{ 65 }}"
+        name="{{item.id}}">
+        <van-cell is-link title="{{item.name}}" url="/pages/reminder-info/reminder-info?id={{item.id}}" />
+        <van-icon slot="icon" name="list-switch" value="{{item.itemsLength || 0}}" custom-style="color: var(--color-primary);" />
+        <van-button 
+          slot="right" 
+          type="danger" 
+          square 
+          custom-style="height: 100%;"
+          data-id="{{ item.id }}"
+          bind:click="handleDelete">删除</van-button>
+      </van-swipe-cell>
+    </scroll-view>
+  </view>
+  <!-- 新建列表 -->
+  <van-dialog 
+    use-slot
+    close-on-click-overlay
+    show="{{showAddListDialog}}"
+    showConfirmButton="{{false}}">
+    <view class="add-list-dialog-content">
+      <input value="{{initNewListName}}" placeholder="请填写列表名称" bindconfirm="handleAddListConfirm" />
+    </view>
+  </van-dialog>
+  <!-- 消息提示实例 -->
+  <van-notify id="van-notify" />
+</view>

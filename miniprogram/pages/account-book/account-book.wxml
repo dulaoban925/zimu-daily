@@ -59,6 +59,7 @@
   <!-- 新建账本编辑账本名称 -->
   <van-dialog 
     use-slot
+    close-on-click-overlay
     show="{{showAbNameDialog}}"
     showConfirmButton="{{false}}">
     <view class="ab-name-dialog-content">

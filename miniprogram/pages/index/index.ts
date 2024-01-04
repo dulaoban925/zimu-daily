@@ -17,19 +17,19 @@ Page({
         code: 'reminder',
         text: '提醒',
         icon: 'list-switch',
-        url: '/pages/account-book/account-book'
+        url: '/pages/reminder/reminder'
       },
       {
         code: 'schedule',
         text: '日程',
         icon: 'todo-list-o',
-        url: '/pages/account-book/account-book'
+        url: '/pages/schedule/schedule'
       },
       {
         code: 'note',
         text: '便签',
         icon: 'notes-o',
-        url: '/pages/account-book/account-book'
+        url: '/pages/note/note'
       }
     ]
   }

@@ -20,14 +20,14 @@ const queryByPage = async (
   }
   const { count, rows } = await AccountBookItem.findAndCountAll({
     order: [['createdAt', 'DESC']],
-    limit: 10,
+    limit: pageSize,
     offset: (page - 1) * pageSize,
     where,
   })
 
   return {
     total: count,
-    totalPages: Math.ceil(count / 10),
+    totalPages: Math.ceil(count / pageSize),
     page,
     pageSize,
     data: rows,

@@ -1,0 +1,65 @@
+.reminder {
+  height: 100%;
+  overflow: hidden;
+}
+
+.reminder-summary {
+  padding: var(--common-padding-margin);
+}
+
+.summary-block {
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--common-padding-margin);
+}
+
+.summary-first-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.summary-block.half {
+  width: 50%;
+  margin-bottom: var(--common-padding-margin);
+}
+
+.summary-block.half:first-child {
+  margin-right: var(--common-padding-margin);
+}
+
+.summary-block-static {
+  font-size: var(--font-size-large);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary-num {
+  font-size: var(--font-size-larger);
+}
+
+.list-title {
+  font-size: var(--font-size-large);
+  color: var(--color-primary);
+  background-color: #ffffff;
+  padding: 10rpx var(--common-padding-margin);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.add-list-dialog-content {
+  padding: 48rpx;
+}
+
+.list-scroll-view {
+  height: calc(100vh - 418rpx);
+  box-sizing: border-box;
+  padding: var(--common-padding-margin);
+}
