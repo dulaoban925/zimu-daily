@@ -93,11 +93,18 @@ Page({
   },
 
   // 查询账本列表
-  queryAccountBooks: async function (page = 1, pageSize = 10) {
+  queryAccountBooks: async function (page?: number, pageSize?: number) {
+    const { _page, _pageSize } = this.data
+    page = page || _page
+    pageSize = pageSize || _pageSize
     const data = await queryByPage(page, pageSize)
+    // 若是第一页，则直接赋值，否则拼接到原列表
+    const accountBooks = page === 1 ? data : this.data.accountBooks.concat(data)
+    // 若最新列表数据小于原页数 * 页数据量，说明最新页没有获取到数据，不需要更新当前页
+    const needIncPage = page === 1 || accountBooks.length > _page * _pageSize
     this.setData({
-      _page: page,
-      accountBooks: data
+      _page: needIncPage ? page : _page,
+      accountBooks
     })
   },
 
