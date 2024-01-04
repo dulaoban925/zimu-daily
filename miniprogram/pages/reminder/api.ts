@@ -22,3 +22,15 @@ export async function insert(params: Reminder) {
 
   return data
 }
+
+export async function deleteById(id: string) {
+  const { data } = await request({
+    url: `${REMINDER_REQUEST_PATH_PREFIX}/deleteById`,
+    method: 'DELETE',
+    data: {
+      id
+    }
+  })
+
+  return data
+}

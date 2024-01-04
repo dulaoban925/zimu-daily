@@ -46,6 +46,7 @@
 
 .list-title {
   font-size: var(--font-size-large);
+  font-weight: bold;
   color: var(--color-primary);
   background-color: #ffffff;
   padding: 10rpx var(--common-padding-margin);

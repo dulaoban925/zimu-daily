@@ -1,5 +1,6 @@
-import { queryByPage, insert } from "./api"
+import { queryByPage, insert, deleteById } from "./api"
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
+import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 
 // pages/reminder/reminder.ts
 Page({
@@ -149,6 +150,25 @@ Page({
         this.setData({
           _page: nextPage
         })
+      })
+  },
+
+  // 删除列表
+  handleDelete(e: WechatMiniprogram.BaseEvent) {
+    Dialog.confirm({
+      title: '警告',
+      message: '确认删除该列表？',
+    })
+      .then(async () => {
+        const id = e.currentTarget.dataset.id
+        deleteById(id)
+          .then(() => {
+            Notify({ type: 'success', message: '删除成功' })
+            this.queryReminders(this.data._page)
+          })
+          .catch((e: any) => {
+            Notify(`删除失败：${e.message}`)
+          })
       })
   }
 })

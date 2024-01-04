@@ -37,6 +37,7 @@
       enable-back-to-top
       refresher-enabled
       refresher-triggered="{{refresherTriggered}}"
+      show-scrollbar="{{false}}"
       class="list-scroll-view"
       bindrefresherrefresh="handleRefresherRefresh"
       bindscrolltolower="handleScrollToLower">
@@ -46,8 +47,13 @@
         wx:key="id" 
         right-width="{{ 65 }}"
         name="{{item.id}}">
-        <van-cell is-link title="{{item.name}}" url="/pages/reminder-info/reminder-info?id={{item.id}}" />
-        <van-icon slot="icon" name="list-switch" value="{{item.itemsLength || 0}}" custom-style="color: var(--color-primary);" />
+        <van-cell 
+          is-link 
+          title="{{item.name}}"
+          value="{{item.itemLength || 0}}" 
+          url="/pages/reminder-info/reminder-info?id={{item.id}}">
+          <van-icon slot="icon" size="22" name="info" custom-style="color: var(--color-primary); margin-right: 10rpx;" />
+        </van-cell>
         <van-button 
           slot="right" 
           type="danger" 
@@ -70,4 +76,6 @@
   </van-dialog>
   <!-- 消息提示实例 -->
   <van-notify id="van-notify" />
+  <!-- 弹窗实例，用于 API 调用 -->
+  <van-dialog id="van-dialog" />
 </view>
