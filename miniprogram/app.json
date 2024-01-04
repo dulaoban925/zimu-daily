@@ -19,6 +19,7 @@
   },
   "componentFramework": "glass-easel",
   "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
   "usingComponents": {
     "van-button": "@vant/weapp/button/index",
     "van-empty": "@vant/weapp/empty/index",
