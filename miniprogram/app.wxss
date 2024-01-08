@@ -16,7 +16,8 @@ page {
   --font-size-small: 20rpx;
   --font-size-default: 28rpx;
   --font-size-large: 34rpx;
-  --font-size-larger: 60rpx;
+  --font-size-larger: 54rpx;
+  --border-radius-default: 20rpx;
 }
 
 .page-container {

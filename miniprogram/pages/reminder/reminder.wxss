@@ -10,7 +10,7 @@
 .summary-block {
   box-sizing: border-box;
   background-color: #ffffff;
-  border-radius: 20rpx;
+  border-radius: var(--border-radius-default);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -60,7 +60,10 @@
 }
 
 .list-scroll-view {
-  height: calc(100vh - 418rpx);
+  /** 处理 iphoneX + 底部安全距离*/
+  height: calc(100vh - 418rpx - constant(safe-area-inset-bottom));
+  height: calc(100vh - 418rpx - env(safe-area-inset-bottom));
   box-sizing: border-box;
   padding: var(--common-padding-margin);
+  border-radius: var(--border-radius-default);
 }

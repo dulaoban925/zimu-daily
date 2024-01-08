@@ -1,9 +1,6 @@
 import { REMINDER_REQUEST_PATH_PREFIX } from "../../constants/request"
 import request from "../../utils/request"
-
-interface Reminder {
-  name: string
-}
+import { Reminder } from "./types"
 
 export async function queryByPage(page: number, pageSize: number) {
   const { data } = await request({
@@ -11,6 +8,15 @@ export async function queryByPage(page: number, pageSize: number) {
   })
 
   return data
+}
+
+// 根据提醒事项 id 查询详情
+export async function queryById(id: string): Promise<Reminder> {
+  const { data } = await request({
+    url: `${REMINDER_REQUEST_PATH_PREFIX}/queryById?id=${id}`
+  })
+
+  return data as Reminder
 }
 
 export async function insert(params: Reminder) {

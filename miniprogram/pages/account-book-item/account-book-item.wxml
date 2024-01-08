@@ -1,5 +1,5 @@
 <!-- 账簿明细页面 -->
-<view class="account-book-info-item page-container">
+<view class="account-book-item page-container">
   <view class="item-amount cell">
     <view class="label">交易金额</view>
     <view class="amount-input">

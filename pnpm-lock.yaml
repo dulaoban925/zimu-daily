@@ -1,0 +1,32 @@
+lockfileVersion: '6.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+dependencies:
+  '@vant/weapp':
+    specifier: ^1.11.2
+    version: 1.11.2
+  dayjs:
+    specifier: ^1.11.10
+    version: 1.11.10
+
+devDependencies:
+  miniprogram-api-typings:
+    specifier: ^2.8.3-1
+    version: 2.12.0
+
+packages:
+
+  /@vant/weapp@1.11.2:
+    resolution: {integrity: sha512-NlZQEW4ijxD1GAmTY0dz2mEw0KWff9DSi5k5WGl1YS19qGp1l3BssID/uBnzrC82HjWH/Sb5V9+r7/YEcfnBPQ==}
+    dev: false
+
+  /dayjs@1.11.10:
+    resolution: {integrity: sha512-vjAczensTgRcqDERK0SR2XMwsF/tSvnvlv6VcF2GIhg6Sx4yOIt/irsr1RDJsKiIyBzJDpCoXiWWq28MqH2cnQ==}
+    dev: false
+
+  /miniprogram-api-typings@2.12.0:
+    resolution: {integrity: sha512-ibvbqeslVFur0IAvTxLMvsbtvVcMo6gwvOnj0YZHV7aeDLu091VQRrETT2QuiG9P6aZWRcxeNGJChRKVPCp9VQ==}
+    dev: true

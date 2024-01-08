@@ -3,11 +3,13 @@
     "pages/index/index",
     "pages/account-book/account-book",
     "pages/account-book-info/account-book-info",
-    "pages/account-book-info-item/account-book-info-item",
-    "pages/reminder/reminder"
+    "pages/account-book-item/account-book-item",
+    "pages/reminder/reminder",
+    "pages/reminder-info/reminder-info",
+    "pages/reminder-item/reminder-item"
   ],
   "window": {
-    "navigationBarTitleText": "梓沐私人管家"
+    "navigationBarTitleText": "梓沐日常小助手"
   },
   "rendererOptions": {
     "skyline": {
@@ -32,6 +34,8 @@
     "van-notify": "@vant/weapp/notify/index",
     "van-cell": "@vant/weapp/cell/index",
     "van-row": "@vant/weapp/row/index",
-    "van-col": "@vant/weapp/col/index"
+    "van-col": "@vant/weapp/col/index",
+    "van-radio": "@vant/weapp/radio/index",
+    "van-checkbox": "@vant/weapp/checkbox/index"
   }
 }

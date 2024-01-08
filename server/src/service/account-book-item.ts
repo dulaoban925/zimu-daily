@@ -8,10 +8,8 @@ import {
 import RelationAccountBookItem from '../models/relation-account-book-item'
 import { v4 as uuidV4 } from 'uuid'
 
-const queryByPage = async (
-  params: AccountBookItemQueryParams = { page: 1, pageSize: 10 }
-) => {
-  const { page, pageSize } = params
+const queryByPage = async (params: AccountBookItemQueryParams) => {
+  const { page = 1, pageSize = 10 } = params
   const where: any = {}
   for (const [key, value] of Object.entries(params)) {
     if (!['page', 'pageSize'].includes(key)) {

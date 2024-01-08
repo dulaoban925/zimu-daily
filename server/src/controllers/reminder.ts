@@ -1,14 +1,14 @@
 /**
  * 提醒事项 Controller
  */
-import accountBookService from '../service/reminder'
+import reminderService from '../service/reminder'
 import useBaseController, { BaseController } from './base'
 
-const accountBookBaseController: BaseController =
-  useBaseController(accountBookService)
+const reminderBaseController: BaseController =
+  useBaseController(reminderService)
 
-const accountBookController = {
-  ...accountBookBaseController,
+const reminderController = {
+  ...reminderBaseController,
 }
 
-export default accountBookController
+export default reminderController

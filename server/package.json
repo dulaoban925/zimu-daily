@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "梓沐私人管家小程序后端服务",
+  "description": "梓沐日常小助手后端服务",
   "scripts": {
     "start": "npm run build && npm run serve",
     "serve": "node dist/server.js",

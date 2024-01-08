@@ -5,7 +5,7 @@ import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import { navigateTo } from "../../utils/rotuer"
 import { deleteById, queryAccountBookById } from "./api"
 import { AccountBookInfo } from "./types"
-import { AccountBookItem } from "../account-book-info-item/types"
+import { AccountBookItem } from "../account-book-item/types"
 
 Page({
 
@@ -47,7 +47,9 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(query) {
+  onLoad(query: {
+    id?: string
+  }) {
     console.log('onLoad')
     // 编辑状态，会在 query 中传递 id，以获取详情数据
     if (query.id) {
@@ -150,7 +152,7 @@ Page({
   // 新增按钮
   handleAddClick() {
     navigateTo({
-      url: `/pages/account-book-info-item/account-book-info-item?parentId=${this.data.info.id}`
+      url: `/pages/account-book-item/account-book-item?parentId=${this.data.info.id}`
     })
   },
 
@@ -158,7 +160,7 @@ Page({
   handleEditDetailItem(e: WechatMiniprogram.BaseEvent) {
     const id = e.currentTarget.dataset.id
     navigateTo({
-      url: `/pages/account-book-info-item/account-book-info-item?id=${id}`
+      url: `/pages/account-book-item/account-book-item?id=${id}`
     })
   },
 

@@ -65,6 +65,21 @@ export const ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON = {
   [ACCOUNT_BOOK_ITEM_IE_SOURCE.EXPENSE_RENT]: 'home-o'
 }
 
+/** 提醒事项 start */
+// 提醒事项分类
+export const REMINDER_CATEGORY = {
+  TODAY: 'today',
+  PLAN: 'plan',
+  ALL: 'all'
+}
+
+export const REMINDER_CATEGORY_DESC = {
+  [REMINDER_CATEGORY.TODAY]: '今天',
+  [REMINDER_CATEGORY.PLAN]: '计划',
+  [REMINDER_CATEGORY.ALL]: '全部',
+}
+/** 提醒事项 end */
+
 // 页面操作
 export const PAGE_OPERATION = {
   NEW: 'new',

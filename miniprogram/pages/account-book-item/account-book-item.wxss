@@ -1,4 +1,4 @@
-.account-book-info-item {
+.account-book-item {
   --button-primary-background-color: #d6f8af;
   --button-primary-border-color: #d6f8af;
   --button-primary-color: var(--color-gray-8);
