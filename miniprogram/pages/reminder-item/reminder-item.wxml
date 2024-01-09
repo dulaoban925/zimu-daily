@@ -1,2 +1,42 @@
-<!--pages/reminder-item/reminder-item.wxml-->
-<text>pages/reminder-item/reminder-item.wxml</text>
+<!-- 提醒事项明细 -->
+<view class="reminder-item page-container">
+  <van-cell-group custom-class="basic-info info-block">
+    <van-cell center>
+      <input
+        value="{{ reminderItem.title }}"
+        placeholder="标题"
+        data-field="title"
+        bindconfirm="handleInputConfirm"
+      />
+    </van-cell>
+    <van-cell center>
+      <input
+        value="{{ reminderItem.comment }}"
+        placeholder="备注"
+        data-field="comment"
+        bindconfirm="handleInputConfirm"
+      />
+    </van-cell>
+  </van-cell-group>
+  <van-cell-group custom-class="remind-info info-block">
+    <van-cell center title="在指定时间提醒">
+      <van-switch 
+        checked="{{ reminderItem.remindFlag === 'Y' }}"
+        bind:change="handleRemindFlagChange"/>
+    </van-cell>
+    <block wx:if="{{reminderItem.remindFlag === 'Y'}}">
+      <van-cell is-link center title="提醒时间" value="{{reminderItem.remindTime}}" />
+    </block>
+  </van-cell-group>
+  <van-cell-group custom-class="priority-info info-block">
+    <van-cell is-link center title="优先级" value="{{reminderItem.priority}}" />
+  </van-cell-group>
+  <view class="bottom-buttons cell">
+    <text class="text-button" bind:tap="handleAddMoreClick">再记一项</text>
+    <van-button type="info" round bind:click="handleConfirmClick">
+      确定{{operation === 'new' ? '添加' : '保存'}}
+    </van-button>
+  </view>
+  <!-- 消息提示实例 -->
+  <van-notify id="van-notify" />
+</view>

@@ -74,6 +74,8 @@
   width: 100%;
   position: fixed;
   box-sizing: border-box;
+  padding: var(--common-padding-margin);
+  background-color: var(--color-white);
   bottom: 0;
   /** 处理 iphoneX + 底部安全距离*/
   bottom: constant(safe-area-inset-bottom);

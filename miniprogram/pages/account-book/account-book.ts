@@ -100,10 +100,10 @@ Page({
     const data = await queryByPage(page, pageSize)
     // 若是第一页，则直接赋值，否则拼接到原列表
     const accountBooks = page === 1 ? data : this.data.accountBooks.concat(data)
-    // 若最新列表数据小于原页数 * 页数据量，说明最新页没有获取到数据，不需要更新当前页
-    const needIncPage = page === 1 || accountBooks.length > _page * _pageSize
+    // 仅 page === 1(重置页数) 或当前页数据量不为空时，更新当前页
+    const needUpdPage = page === 1 || data.length > 0
     this.setData({
-      _page: needIncPage ? page : _page,
+      _page: needUpdPage ? page : _page,
       accountBooks
     })
   },

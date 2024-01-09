@@ -86,3 +86,9 @@ export const PAGE_OPERATION = {
   EDIT: 'edit',
   VIEW: 'view'
 }
+
+// 是否
+export const Y_N = {
+  Y: 'Y',
+  N: 'N'
+}

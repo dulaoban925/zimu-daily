@@ -27,9 +27,9 @@
     <view class="label">备注</view>
     <textarea value="{{itemInfo.comment}}" auto-height placeholder="记录点什么..." data-field="comment" bindinput="handleInput" />
   </view>
-  <view class="bottom-buttons cell">
+  <view class="bottom-buttons">
     <text class="text-button">再记一笔</text>
-    <van-button type="primary" round bind:click="handleConfirmClick">
+    <van-button type="info" round bind:click="handleConfirmClick">
       确定{{operation === 'new' ? '添加' : '保存'}}
     </van-button>
   </view>

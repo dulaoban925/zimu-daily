@@ -32,10 +32,14 @@
     "van-grid-item": "@vant/weapp/grid-item/index",
     "van-icon": "@vant/weapp/icon/index",
     "van-notify": "@vant/weapp/notify/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
     "van-cell": "@vant/weapp/cell/index",
     "van-row": "@vant/weapp/row/index",
     "van-col": "@vant/weapp/col/index",
     "van-radio": "@vant/weapp/radio/index",
-    "van-checkbox": "@vant/weapp/checkbox/index"
+    "van-checkbox": "@vant/weapp/checkbox/index",
+    "van-field": "@vant/weapp/field/index",
+    "van-switch": "@vant/weapp/switch/index",
+    "van-datetime-picker": "@vant/weapp/datetime-picker/index"
   }
 }

@@ -2,6 +2,7 @@ import Reminder from '../models/reminder'
 import { ZiMu } from 'zimu'
 import { REQUEST_PARAMS_ERROR_CODE, ZiMuError } from '../utils/error'
 import { ReminderInstance } from 'business/reminder'
+import ReminderItem from '../models/reminder-item'
 
 const queryByPage = async (params: ZiMu.PageQuery) => {
   const { page = 1, pageSize = 10 } = params
@@ -10,6 +11,18 @@ const queryByPage = async (params: ZiMu.PageQuery) => {
     limit: pageSize,
     offset: (page - 1) * pageSize,
   })
+
+  if (rows.length > 0) {
+    for (let i = 0; i < rows.length; i++) {
+      const itemLength = await ReminderItem.count({
+        where: {
+          parentId: rows[i].id,
+          finished: 'N',
+        },
+      })
+      rows[i].itemLength = itemLength
+    }
+  }
 
   return {
     total: count,

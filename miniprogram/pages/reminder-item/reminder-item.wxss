@@ -1,1 +1,28 @@
-/* pages/reminder-item/reminder-item.wxss */
+.info-block {
+  margin-bottom: var(--common-padding-margin);
+}
+
+.info-block input {
+  text-align: left;
+}
+
+
+.bottom-buttons {
+  width: 100%;
+  position: fixed;
+  box-sizing: border-box;
+  padding: var(--common-padding-margin);
+  background-color: var(--color-white);
+  bottom: 0;
+  /** 处理 iphoneX + 底部安全距离*/
+  bottom: constant(safe-area-inset-bottom);
+  bottom: env(safe-area-inset-bottom);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.text-button {
+  font-size: 28rpx;
+  color: var(--color-gray-6);
+}

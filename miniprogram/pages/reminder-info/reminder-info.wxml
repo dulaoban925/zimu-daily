@@ -5,16 +5,46 @@
     <van-icon size="25" name="add" bind:tap="handleAddTap" />
   </view>
   <view class="info-list">
-    <van-empty wx:if="{{reminderItems.length === 0}}" description="暂无数据" />
-    <scroll-view wx:else scroll-y enable-back-to-top refresher-enabled refresher-triggered="{{refresherTriggered}}" show-scrollbar="{{false}}" class="list-scroll-view" bindrefresherrefresh="handleRefresherRefresh" bindscrolltolower="handleScrollToLower">
-      <van-swipe-cell class="reminder-item-cell" wx:for="{{reminderItems}}" wx:key="id" right-width="{{ 65 }}" name="{{item.id}}">
-        <van-cell is-link center title="{{item.name}}" label="{{item.startTime}}" url="/pages/reminder-info-item/reminder-info-item?id={{item.id}}">
-          <van-checkbox slot="icon" value="{{ item.finished }}" data-id="{{item.id}}" bind:change="onFinishedChange" />
-        </van-cell>
-        <van-button slot="right" type="danger" square custom-style="height: 100%;" data-id="{{ item.id }}" bind:click="handleDelete">
-          删除
-        </van-button>
-      </van-swipe-cell>
+    <scroll-view 
+      scroll-y 
+      enable-back-to-top 
+      refresher-enabled 
+      refresher-triggered="{{refresherTriggered}}" 
+      show-scrollbar="{{false}}" 
+      class="list-scroll-view" bindrefresherrefresh="handleRefresherRefresh" bindscrolltolower="handleScrollToLower">
+      <van-empty wx:if="{{reminderItems.length === 0}}" description="暂无数据" />
+      <block wx:else  >
+        <van-swipe-cell 
+        class="reminder-item-cell" 
+        wx:for="{{reminderItems}}" 
+        wx:key="id" 
+        right-width="{{ 65 }}" 
+        name="{{item.id}}">
+          <van-cell 
+            is-link 
+            center 
+            title="{{item.title}}" 
+            label="{{item.startTime}}" 
+            link-type="navigateTo"
+            url="/pages/reminder-item/reminder-item?id={{item.id}}">
+          <van-checkbox 
+            slot="icon" 
+            value="{{ item.finished === 'Y' }}" 
+            data-id="{{item.id}}" 
+            bind:change="onFinishedChange"
+            catch:tap="() => {}" />
+          </van-cell>
+          <van-button 
+            slot="right" 
+            type="danger" 
+            square 
+            custom-style="height: 100%;" 
+            data-id="{{ item.id }}" 
+            bind:click="handleDelete">
+            删除
+          </van-button>
+        </van-swipe-cell>  
+      </block>
     </scroll-view>
   </view>
   <!-- 消息提示实例 -->

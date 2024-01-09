@@ -1,9 +1,9 @@
-import {REMINDER_CATEGORY_DESC} from '../../constants/data'
-import { deleteById, queryByPage } from './api'
+import {REMINDER_CATEGORY_DESC, Y_N} from '../../constants/data'
+import { deleteById, queryByPage, updateById } from '../reminder-item/api'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import { Reminder } from '../reminder/types'
 import { navigateTo } from '../../utils/rotuer'
-import { ReminderItem } from './types'
+import { ReminderItem } from '../reminder-item/types'
 import { queryById as queryReminderById } from '../reminder/api'
 
 Page({
@@ -35,29 +35,17 @@ Page({
    */
   onLoad(query: {
     id?: string
-    from?: string
+    category?: string
   }) {
-    if (query.from) {
-      this.setData({
-        reminderTitle: REMINDER_CATEGORY_DESC[query.from]
-      })
-      this.setData({
-        _initFilter: {
-          byCategory: true,
-          filter: query.from
-        }
-      })
-      this.queryReminderInfo()
-    }
-    if (query.id) {
-      this.setData({
-        _initFilter: {
-          byCategory: false,
-          filter: query.id
-        }
-      })
-      this.queryReminderInfo()
-    }
+    const isFromCategory = !!query.category
+
+    this.setData({
+      _initFilter: {
+        byCategory: isFromCategory,
+        filter: isFromCategory ? query.category! : query.id!
+      }
+    })
+    this.queryReminderInfo()
   },
 
   /**
@@ -111,39 +99,51 @@ Page({
 
   // 查询提醒事项信息
   async queryReminderInfo(page?: number, pageSize?: number) {
-    const { _page, _pageSize } = this.data
-    page = page || _page
-    pageSize = pageSize || _pageSize
-    const {byCategory} = this.data._initFilter
-
-    byCategory ?
-      this.queryReminderInfoByCategory(page, pageSize)
-      : this.queryReminderInfoById(page, pageSize)
+    this.queryReminderHeader()
+    this.queryReminderItems(page, pageSize)
   },
 
-  async queryReminderInfoByCategory(page: number, pageSize: number) {
-    const {filter} = this.data._initFilter
+  async queryReminderHeader() {
+    const { byCategory, filter} = this.data._initFilter
 
-    const reminderHeader = {
-      id: filter,
-      name: REMINDER_CATEGORY_DESC[filter]
+    let reminderHeader: Reminder = {}
+
+    if (byCategory) {
+      reminderHeader = {
+        id: filter,
+        name: REMINDER_CATEGORY_DESC[filter]
+      }
+    } else {
+      reminderHeader = await queryReminderById(filter)
     }
-    const data = await queryByPage(page, pageSize, {category: filter})
 
     this.setData({
       reminderHeader,
-      reminderItems: data
     })
   },
 
-  async queryReminderInfoById(page: number, pageSize: number) {
-    const {filter: id} = this.data._initFilter
-    const reminderHeader = await queryReminderById(id)
-    const data = await queryByPage(page, pageSize, {parentId: id})
+  async queryReminderItems(page?: number, pageSize?: number) {
+    const { _page, _pageSize,  _initFilter: {byCategory, filter} } = this.data
+    page = page || _page
+    pageSize = pageSize || _pageSize
+
+    const params = byCategory ? 
+      {
+        category: filter
+      } :
+      {
+        parentId: filter
+      }
+    const data = await queryByPage(page, pageSize, params)
+
+    // 若是第一页，则直接赋值，否则拼接到原列表
+    const reminderItems = page === 1 ? data : this.data.reminderItems.concat(data)
+    // 仅 page === 1(重置页数) 或当前页数据量不为空时，更新当前页
+    const needUpdPage = page === 1 || data.length > 0
 
     this.setData({
-      reminderHeader,
-      reminderItems: data
+      _page: needUpdPage ? page : _page,
+      reminderItems
     })
   },
 
@@ -155,20 +155,41 @@ Page({
   },
 
   // 下拉刷新
-  handleRefresherRefresh() {},
+  handleRefresherRefresh() {
+    const {_page, _pageSize} = this.data
+    this.queryReminderItems(_page, _pageSize)
+      .finally(() => {
+        this.setData({
+          refresherTriggered: false
+        })
+      })
+  },
 
   // 触底
-  handleScrollToLower() {},
+  handleScrollToLower() {
+    this.queryReminderItems(this.data._page + 1)
+  },
 
   // 完成
   onFinishedChange(e: WechatMiniprogram.CustomEvent) {
     const reminderItemId = e.currentTarget.dataset.id
     const value = e.detail
 
+    console.log('value', value)
+
     const index = this.data.reminderItems.findIndex(rdi => rdi.id === reminderItemId)
     this.setData({
-      [`reminderItems[${index}].finished`]: value
+      [`reminderItems[${index}].finished`]: value ? Y_N.Y : Y_N.N
     })
+    updateById(this.data.reminderItems[index])
+      .then((data) => {
+        this.setData({
+          [`reminderItems[${index}`]: data
+        })
+      })
+      .catch(() => {
+        Notify({type: 'danger', message: '出错啦...'})
+      })
   },
 
   // 删除
@@ -177,7 +198,8 @@ Page({
     deleteById(id)
       .then(() => {
         Notify({ type: 'success', message: '删除成功' })
-        this.queryReminderInfo()
+        const {_page, _pageSize} = this.data
+        this.queryReminderItems(_page, _pageSize)
       })
       .catch(e => {
         Notify(`删除失败:${e.message}`)
