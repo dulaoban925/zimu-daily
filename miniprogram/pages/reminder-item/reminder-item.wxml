@@ -25,11 +25,11 @@
         bind:change="handleRemindFlagChange"/>
     </van-cell>
     <block wx:if="{{reminderItem.remindFlag === 'Y'}}">
-      <van-cell is-link center title="提醒时间" value="{{reminderItem.remindTime}}" />
+      <van-cell is-link center title="提醒时间" value="{{ reminderItem.remindTime }}" bind:click="handleRemindTimeClick" />
     </block>
   </van-cell-group>
   <van-cell-group custom-class="priority-info info-block">
-    <van-cell is-link center title="优先级" value="{{reminderItem.priority}}" />
+    <van-cell is-link center title="优先级" value="{{ REMINDER_PRIORITY_DESC[reminderItem.priority] || '' }}" bind:click="handlePriorityClick" />
   </van-cell-group>
   <view class="bottom-buttons cell">
     <text class="text-button" bind:tap="handleAddMoreClick">再记一项</text>
@@ -39,4 +39,23 @@
   </view>
   <!-- 消息提示实例 -->
   <van-notify id="van-notify" />
+  <!-- 提醒时间 -->
+  <van-action-sheet
+    show="{{ showRemindTimeAction }}"
+  >
+    <van-datetime-picker
+      type="datetime"
+      value="{{ reminderItem.remindTimeStamp }}"
+      bind:confirm="handleRemindTimeConfirm"
+      bind:cancel="handleRemindTimeCancel"
+    />
+  </van-action-sheet>
+  <!-- 优先级 -->
+  <van-action-sheet
+    show="{{ showPriorityAction }}"
+    actions="{{ priorityActions }}"
+    close-on-click-action
+    close-on-click-overlay
+    bind:select="handlePriorityActionSelect"
+  />
 </view>

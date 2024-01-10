@@ -1,4 +1,4 @@
-import { ACCOUNT_BOOK_TYPES } from "../../constants/data"
+import { ACCOUNT_BOOK_TYPES_ARRAY } from "../../constants/account-book"
 import { navigateTo } from "../../utils/rotuer"
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
@@ -17,13 +17,7 @@ Page({
     // 账本列表
     accountBooks: [] as AccountBook[],
     // 账本类型
-    accountBookTypes: [
-      {
-        key: ACCOUNT_BOOK_TYPES.CUSTOM,
-        label: '自定义',
-        image: 'https://pic.52112.com/180406/180406_191/yWco75ssT5_small.jpg'
-      }
-    ],
+    ACCOUNT_BOOK_TYPES_ARRAY,
     // 新建账本
     showAddTypes: false,
     // 新建账本-填写名称，在选择账本类型后触发

@@ -1,4 +1,6 @@
+import dayjs from "dayjs";
 import { PAGE_OPERATION, Y_N } from "../../constants/data";
+import { REMINDER_PRIORITY_DESC } from "../../constants/reminder";
 import Notify from "../../miniprogram_npm/@vant/weapp/notify/notify";
 import { insert, queryById, updateById } from "./api";
 import { ReminderItem } from "./types";
@@ -11,6 +13,16 @@ Page({
    */
   data: {
     reminderItem: {} as ReminderItem,
+    REMINDER_PRIORITY_DESC,
+    // 选择优先级
+    showPriorityAction: false,
+    // 优先级选项
+    priorityActions: Object.entries(REMINDER_PRIORITY_DESC).map(([value, label]) => ({
+      value,
+      name: label
+    })),
+    // 选择提醒时间
+    showRemindTimeAction: false,
     // 页面操作
     _operation: 'new'
   },
@@ -42,7 +54,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    
   },
 
   /**
@@ -62,8 +74,10 @@ Page({
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh() {
-
+  async onPullDownRefresh() {
+    const id = this.data.reminderItem.id
+    if (id) await this.init(id)
+    wx.stopPullDownRefresh()
   },
 
   /**
@@ -82,15 +96,15 @@ Page({
 
   // 初始化
   init(id: string) {
-    wx.showLoading({ title: '加载中...' })
     queryById(id)
       .then(data => {
+        // 设置时间戳字段
+        if (data.remindTime) data.remindTimeStamp = new Date(data.remindTime).getTime()
         this.setData({
           reminderItem: data,
-          _operation: PAGE_OPERATION.NEW
+          _operation: PAGE_OPERATION.EDIT
         })
       })
-      .finally(wx.hideLoading)
   },
 
   // 输入确认
@@ -106,21 +120,78 @@ Page({
   handleRemindFlagChange(e: WechatMiniprogram.CustomEvent) {
     const checked = e.detail
     this.setData({
-      [`reminderItem.remindFlag`]: checked ? Y_N.Y : Y_N.N
+      [`reminderItem.remindFlag`]: checked ? Y_N.Y : Y_N.N,
+      'reminderItem.remindTimeStamp': checked ? Date.now() : '',
+      'reminderItem.remindTime': checked ? this.formatRemindTime() : null,
+    })
+  },
+
+  // 点击提醒时间
+  handleRemindTimeClick() {
+    this.setData({
+      showRemindTimeAction: true
+    })
+  },
+
+  // 选择提醒时间
+  handleRemindTimeConfirm(e: WechatMiniprogram.CustomEvent) {
+    console.log(e, this.formatRemindTime(e.detail as unknown as number))
+    const value = e.detail
+    this.setData({
+      'reminderItem.remindTimeStamp': value,
+      'reminderItem.remindTime': this.formatRemindTime(value as unknown as number ),
+      showRemindTimeAction: false
+    })
+  },
+
+  // 取消选择提醒时间
+  handleRemindTimeCancel() {
+    this.setData({
+      showRemindTimeAction: false
+    })
+  },
+
+  // 格式化提醒时间显示格式
+  formatRemindTime(value?: number | string) { 
+    console.log('value', value)
+    return dayjs(value).format('YYYY-MM-DD HH:mm:ss')
+  },
+
+  // 点击优先级
+  handlePriorityClick() {
+    this.setData({
+      showPriorityAction: true
+    })
+  },
+
+  // 选择优先级
+  handlePriorityActionSelect(e: WechatMiniprogram.CustomEvent) {
+    const selected = e.detail
+    console.log(selected)
+    this.setData({
+      'reminderItem.priority': selected.value,
+      showPriorityAction: false
     })
   },
 
   // 再记一项
-  handleAddMoreClick() {},
+  handleAddMoreClick() {
+    this.setData({
+      _operation: PAGE_OPERATION.NEW,
+      reminderItem: {
+        parentId: this.data.reminderItem.parentId
+      }
+    })
+  },
 
   // 确认
   handleConfirmClick() {
     wx.showLoading({ title: '保存中...'})
     const fn = this.data._operation === PAGE_OPERATION.NEW ? insert : updateById
     fn(this.data.reminderItem)
-      .then((data) => {
+      .then(() => {
         Notify({ type: 'success', message: '保存成功'})
-        this.init(data.id)
+        wx.navigateBack()
       })
       .catch(e => {
         Notify(`保存失败:${e.message}`)

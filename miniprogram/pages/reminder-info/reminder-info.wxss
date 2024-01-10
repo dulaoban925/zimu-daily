@@ -17,3 +17,8 @@
   box-sizing: border-box;
   padding: var(--common-padding-margin);
 }
+
+.item-cell-label-slot {
+  display: flex;
+  justify-content: space-between;
+}

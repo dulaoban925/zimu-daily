@@ -5,7 +5,7 @@
   "scripts": {
     "start": "npm run build && npm run serve",
     "serve": "node dist/server.js",
-    "build": "npm run build-ts && npm run copy-static-assets",
+    "build": "rimraf dist && npm run build-ts && npm run copy-static-assets",
     "build-ts": "tsc",
     "copy-static-assets": "node scripts/copy-static-assets.mjs",
     "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix"
@@ -42,6 +42,7 @@
     "prettier": "^3.1.1",
     "shelljs": "^0.8.5",
     "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "rimraf": "^5.0.5"
   }
 }

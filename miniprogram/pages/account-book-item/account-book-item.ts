@@ -1,4 +1,5 @@
-import { ACCOUNT_BOOK_ITEM_TYPES, ACCOUNT_BOOK_ITEM_INCOME_SOURCE, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE, ACCOUNT_BOOK_ITEM_INCOME_SOURCE_DESC, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON, PAGE_OPERATION } from '../../constants/data'
+import { ACCOUNT_BOOK_ITEM_TYPES, ACCOUNT_BOOK_ITEM_INCOME_SOURCE, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE, ACCOUNT_BOOK_ITEM_INCOME_SOURCE_DESC, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON } from '../../constants/account-book'
+import { PAGE_OPERATION } from '../../constants/data'
 import { insert, queryById, updateById } from './api'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import { AccountBookItem } from './types'
@@ -23,6 +24,13 @@ const ExpenseSourceArray = Object.entries(ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE_DESC)
   icon: ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON[key]
 }))
 
+const InitItemInfo = {
+  amount: 0,
+  type: ACCOUNT_BOOK_ITEM_TYPES.INCOME,
+  source: ACCOUNT_BOOK_ITEM_INCOME_SOURCE.INCOME_SALARY,
+  transactionTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+}
+
 Page({
 
   /**
@@ -31,20 +39,14 @@ Page({
   data: {
     // 明细信息对象
     itemInfo: {
-      type: ACCOUNT_BOOK_ITEM_TYPES.INCOME,
-      source: ACCOUNT_BOOK_ITEM_INCOME_SOURCE.INCOME_SALARY,
-      transactionTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-    },
+      ...InitItemInfo
+    } as AccountBookItem,
     // 收支类型
-    itemTypes: ACCOUNT_BOOK_ITEM_TYPES,
-    // 收入来源
-    incomeSouces: ACCOUNT_BOOK_ITEM_INCOME_SOURCE_DESC,
-    // 支出用途
-    expenseSouces: ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE_DESC,
+    ACCOUNT_BOOK_ITEM_TYPES,
     // 收入来源数组
-    incomeSourceArray: IncomeSourceArray,
+    IncomeSourceArray,
     // 支出用途数组
-    expenseSourceArray: ExpenseSourceArray,
+    ExpenseSourceArray,
     // 当前操作
     operation: PAGE_OPERATION.NEW // 默认新建
   },
@@ -52,7 +54,10 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(query) {
+  onLoad(query: {
+    parentId?: string
+    id?: string
+  }) {
     // 新建明细，传递 parentId
     if (query.parentId) {
       this.setData({
@@ -62,9 +67,9 @@ Page({
     // 编辑/查看明细，传递 id
     if (query.id) {
       this.setData({
+        'itemInfo.id': query.id,
         operation: PAGE_OPERATION.EDIT
       })
-      this.queryAccountBookInfoItem(query.id)
     }
   },
 
@@ -79,7 +84,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.data.itemInfo.id && this.queryAccountBookInfoItem(this.data.itemInfo.id)
   },
 
   /**
@@ -153,21 +158,32 @@ Page({
   // 切换交易用途
   handleSourceClick(e: WechatMiniprogram.BaseEvent) {
     const source = e.currentTarget.dataset.source
+    console.log(this.data.itemInfo.source, source)
     if (this.data.itemInfo.source === source) return
     this.setData({
       'itemInfo.source': source
     })
   },
 
+  // 再记一笔
+  handleAddMoreTap() {
+    this.setData({
+      itemInfo: {
+        parentId: this.data.itemInfo.parentId,
+        relatedIds: [],
+        ...InitItemInfo
+      },
+      operation: PAGE_OPERATION.NEW
+    })
+  },
+
   // 确认添加
   handleConfirmClick() {
     const fn = this.data.operation === PAGE_OPERATION.NEW ? insert : updateById
-    fn(this.data.itemInfo as AccountBookItem)
-      .then((data) => {
+    fn(this.data.itemInfo)
+      .then(() => {
         Notify({ type: 'success', message: '添加成功'})
-        this.setData({
-          itemInfo: data
-        })
+        wx.navigateBack()
       })
       .catch(e => {
         Notify(`添加失败:${e.message}`)

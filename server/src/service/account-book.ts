@@ -20,11 +20,13 @@ const queryByPage = async (params: ZiMu.PageQuery) => {
     offset: (page - 1) * pageSize,
   })
 
-  rows?.forEach(async (row) => {
+  for (const row of rows) {
     const { incomes, expenses } = await queryIeTotalById(row.id)
+    console.log('foreach', incomes, expenses)
     row.incomes = incomes
     row.expenses = expenses
-  })
+  }
+  console.log('rows', rows)
 
   return {
     total: count,

@@ -1,9 +1,10 @@
 export interface ReminderItem {
   id?: string
   parentId: string
-  title: string
+  title?: string
   remindFlag?: string
   remindTime?: string
+  remindTimeStamp?: string
   priority?: string
   comment?: string
   finished?: string

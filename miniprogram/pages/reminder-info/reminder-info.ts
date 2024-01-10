@@ -1,4 +1,5 @@
-import {REMINDER_CATEGORY_DESC, Y_N} from '../../constants/data'
+import {REMINDER_CATEGORY_DESC, REMINDER_PRIORITY_MARK, REMINDER_PRIORITY_MARK_COLOR} from '../../constants/reminder'
+import {Y_N} from '../../constants/data'
 import { deleteById, queryByPage, updateById } from '../reminder-item/api'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import { Reminder } from '../reminder/types'
@@ -21,6 +22,8 @@ Page({
     fromCategory: '',
     // 下拉刷新触发
     refresherTriggered: false,
+    REMINDER_PRIORITY_MARK,
+    REMINDER_PRIORITY_MARK_COLOR,
     // 列表初始化查询参数
     _initFilter: {
       byCategory: false,
@@ -45,7 +48,6 @@ Page({
         filter: isFromCategory ? query.category! : query.id!
       }
     })
-    this.queryReminderInfo()
   },
 
   /**
@@ -59,7 +61,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-
+    this.queryReminderInfo()
   },
 
   /**

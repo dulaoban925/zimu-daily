@@ -9,15 +9,20 @@
   </view>
   <view class="item-type cell">
     <view class="ie-types">
-      <van-button type="{{ itemInfo.type === itemTypes.INCOME ? 'primary' : 'default'}}" size="small" round data-type="{{itemTypes.INCOME}}" bind:click="handleTypeClick">
+      <van-button type="{{ itemInfo.type === ACCOUNT_BOOK_ITEM_TYPES.INCOME ? 'primary' : 'default'}}" size="small" round data-type="{{ACCOUNT_BOOK_ITEM_TYPES.INCOME}}" bind:click="handleTypeClick">
         收入
       </van-button>
-      <van-button type="{{ itemInfo.type === itemTypes.EXPENSE ? 'primary' : 'default'}}" size="small" round data-type="{{itemTypes.EXPENSE}}" bind:click="handleTypeClick">
+      <van-button type="{{ itemInfo.type === ACCOUNT_BOOK_ITEM_TYPES.EXPENSE ? 'primary' : 'default'}}" size="small" round data-type="{{ACCOUNT_BOOK_ITEM_TYPES.EXPENSE}}" bind:click="handleTypeClick">
         支出
       </van-button>
     </view>
     <view class="item-source">
-      <view class="source-content {{itemInfo.soruce === key ? 'active' : ''}}" wx:for="{{itemInfo.type === itemTypes.INCOME ? incomeSourceArray : expenseSourceArray}}" wx:key="key" data-souce="{{item.key}}" bind:tap="handleSourceClick">
+      <view 
+        class="source-content {{itemInfo.source === item.key ? 'active' : ''}}"
+        wx:for="{{itemInfo.type === ACCOUNT_BOOK_ITEM_TYPES.INCOME ? IncomeSourceArray : ExpenseSourceArray}}" 
+        wx:key="key" 
+        data-source="{{item.key}}" 
+        bind:tap="handleSourceClick">
         <van-icon name="{{item.icon}}" size="50rpx" />
         <view class="source-label">{{item.label}}</view>
       </view>
@@ -28,7 +33,7 @@
     <textarea value="{{itemInfo.comment}}" auto-height placeholder="记录点什么..." data-field="comment" bindinput="handleInput" />
   </view>
   <view class="bottom-buttons">
-    <text class="text-button">再记一笔</text>
+    <text class="text-button" bind:tap="handleAddMoreTap">再记一笔</text>
     <van-button type="info" round bind:click="handleConfirmClick">
       确定{{operation === 'new' ? '添加' : '保存'}}
     </van-button>

@@ -1,9 +1,11 @@
+const bannerUrlPrefix = getApp().globalData.serverPrefix
+
 Page({
   data: {
     // 轮播图
     swiperList: [
-      {src: 'http://10.181.51.176:3000/banner1.jpg'},
-      {src: 'http://10.181.51.176:3000/banner2.jpg'},
+      {src: `${bannerUrlPrefix}/banner-christmas-1.jpg`},
+      {src: `${bannerUrlPrefix}/banner-christmas-2.jpg`},
     ],
     // 菜单
     menus: [

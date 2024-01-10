@@ -43,7 +43,7 @@
     bind:close="handleActionSheetClose">
     <van-grid column-num="3" clickable>
       <van-grid-item 
-        wx:for="{{accountBookTypes}}"
+        wx:for="{{ACCOUNT_BOOK_TYPES_ARRAY}}"
         wx:key="key"
         use-slot
         data-type="{{item}}"

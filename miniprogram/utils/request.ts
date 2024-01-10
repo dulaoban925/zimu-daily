@@ -2,7 +2,7 @@
  * 请求工具类
  */
 // 基础路径
-const baseUrl = 'http://10.181.51.176:3000'
+const baseUrl = getApp().globalData?.serverPrefix || 'http://localhost:3000'
 
 export default function request(options: WechatMiniprogram.RequestOption): Promise<{
   code: number

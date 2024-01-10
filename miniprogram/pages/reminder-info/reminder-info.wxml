@@ -23,10 +23,21 @@
           <van-cell 
             is-link 
             center 
-            title="{{item.title}}" 
-            label="{{item.startTime}}" 
+            use-label-slot
             link-type="navigateTo"
             url="/pages/reminder-item/reminder-item?id={{item.id}}">
+          <view slot="title">
+            <span 
+              wx:if="{{!!item.priority}}" 
+              style="margin-right: 6rpx;color: {{REMINDER_PRIORITY_MARK_COLOR[item.priority]}}">
+              {{ REMINDER_PRIORITY_MARK[item.priority] }}
+            </span>
+            <text>{{item.title}}</text>
+          </view>
+          <view slot="label" class="item-cell-label-slot">
+            <text>{{item.comment}}</text>
+            <text>{{item.remindTime || ''}}</text>
+          </view>
           <van-checkbox 
             slot="icon" 
             value="{{ item.finished === 'Y' }}" 

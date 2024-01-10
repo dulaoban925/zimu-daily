@@ -1,6 +1,7 @@
 import { ReminderItemInstance } from 'business/reminder'
 import sequelize from '../db'
 import { DataTypes } from 'sequelize'
+import dayjs from 'dayjs'
 
 /**
  * 提醒事项明细 model
@@ -25,11 +26,19 @@ const ReminderItem = sequelize.define<ReminderItemInstance>(
     // 是否消息提醒
     remindFlag: DataTypes.STRING,
     // 提醒时间
-    remindTime: DataTypes.DATE,
+    remindTime: {
+      type: DataTypes.DATE,
+      get() {
+        const val = this.getDataValue('remindTime')
+        return val ? dayjs(val).format('YYYY-MM-DD HH:mm:ss') : null
+      },
+    },
     // 备注
     comment: DataTypes.STRING,
     // 是否已完成
     finished: DataTypes.STRING,
+    // 优先级
+    priority: DataTypes.STRING,
     // 创建时间
     createdAt: DataTypes.DATE,
     // 创建人

@@ -1,6 +1,6 @@
 <!-- 账本明细列表页面 -->
 <view class="account-book-info page-container">
-  <view class="info-header" style="background-image: {{info.image}};">
+  <view class="info-header" style="background-image: url({{info.image}});">
     <span>
       收入：￥
       <text style="color: #4eae70; font-weight: bold; padding-right: 40rpx;">{{info.incomes}}</text>

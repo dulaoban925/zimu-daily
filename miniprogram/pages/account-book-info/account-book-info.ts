@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { ACCOUNT_BOOK_ITEM_TYPE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_DESC } from "../../constants/data"
+import { ACCOUNT_BOOK_ITEM_TYPE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_DESC } from "../../constants/account-book"
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import { navigateTo } from "../../utils/rotuer"
@@ -54,7 +54,9 @@ Page({
     // 编辑状态，会在 query 中传递 id，以获取详情数据
     if (query.id) {
       // 查询账本详情
-      this.queryInfo(query.id)
+      this.setData({
+        'info.id': query.id
+      })
     }
   },
 

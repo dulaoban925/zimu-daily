@@ -24,6 +24,7 @@ interface ReminderItemAttributes {
   title: string
   remindFlag: string
   remindTime: string
+  priority: string
   comment: string
   finished: string
   createdAt: string
