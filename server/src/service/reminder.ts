@@ -3,6 +3,42 @@ import { ZiMu } from 'zimu'
 import { REQUEST_PARAMS_ERROR_CODE, ZiMuError } from '../utils/error'
 import { ReminderInstance } from 'business/reminder'
 import ReminderItem from '../models/reminder-item'
+import { Op } from 'sequelize'
+import dayjs from 'dayjs'
+
+// 获取统计指标
+const querySummaryByCategory = async () => {
+  // 今天 - 提醒日期早于今天的事项
+  const today = await ReminderItem.count({
+    where: {
+      finished: 'N',
+      remindTime: {
+        [Op.lte]: new Date(`${dayjs().format('YYYY-MM-DD')} 23:59:59`),
+      },
+    },
+  })
+  // 计划 - 提醒日期晚于今天的事项
+  const plan = await ReminderItem.count({
+    where: {
+      finished: 'N',
+      remindTime: {
+        [Op.gt]: new Date(`${dayjs().format('YYYY-MM-DD')} 23:59:59`),
+      },
+    },
+  })
+  // 全部 - 所有未完成的提醒事项
+  const all = await ReminderItem.count({
+    where: {
+      finished: 'N',
+    },
+  })
+
+  return {
+    today: today,
+    plan: plan,
+    all: all,
+  }
+}
 
 const queryByPage = async (params: ZiMu.PageQuery) => {
   const { page = 1, pageSize = 10 } = params
@@ -76,7 +112,8 @@ const queryById = async (params: { id: string }) => {
   return reminder
 }
 
-export default {
+export {
+  querySummaryByCategory,
   queryByPage,
   insert,
   deleteById,

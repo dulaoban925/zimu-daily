@@ -1,7 +1,7 @@
 /**
  * 提醒事项 Controller
  */
-import reminderService from '../service/reminder'
+import * as reminderService from '../service/reminder'
 import useBaseController, { BaseController } from './base'
 
 const reminderBaseController: BaseController =
@@ -9,6 +9,7 @@ const reminderBaseController: BaseController =
 
 const reminderController = {
   ...reminderBaseController,
+  querySummaryByCategory: reminderService.querySummaryByCategory,
 }
 
 export default reminderController

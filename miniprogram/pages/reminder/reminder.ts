@@ -1,6 +1,8 @@
 import { queryByPage, insert, deleteById } from "./api"
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
+import { querySummaryByCategory } from "./api"
+import { navigateTo } from "../../utils/rotuer"
 
 // pages/reminder/reminder.ts
 Page({
@@ -9,6 +11,11 @@ Page({
    * 页面的初始数据
    */
   data: {
+    summaries: {
+      today: 0,
+      plan: 0,
+      all: 0
+    },
     reminders: [],
     // 新增列表弹窗表示
     showAddListDialog: false,
@@ -81,8 +88,16 @@ Page({
   // 初始化
   async init() {
     // 获取统计数据
+    this.querySummaries()
     // 获取列表
     this.queryReminders()
+  },
+
+  async querySummaries() {
+    const data = await querySummaryByCategory()
+    this.setData({
+      summaries: data
+    })
   },
 
   async queryReminders(page?: number, pageSize?: number) {
@@ -136,6 +151,14 @@ Page({
         })
         this.data._freshing = false
       })
+  },
+
+  // 点击汇总块
+  handleSummaryTap(e: WechatMiniprogram.CustomEvent) {
+    const category = e.currentTarget.dataset.category
+    navigateTo({
+      url: `/pages/reminder-info/reminder-info?category=${category}`
+    })
   },
 
   // 滚动触底

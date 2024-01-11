@@ -2,11 +2,22 @@ import { ZiMu } from 'zimu'
 import reminderController from '../controllers/reminder'
 import { generateRouterWithInterceptor } from '../utils/router'
 
-const { queryByPage, queryList, insert, deleteById, updateById, queryById } =
-  reminderController
+const {
+  querySummaryByCategory,
+  queryByPage,
+  queryList,
+  insert,
+  deleteById,
+  updateById,
+  queryById,
+} = reminderController
 
 // 所有路由
 export const routes: ZiMu.RouteDefine[] = [
+  {
+    path: '/querySummaryByCategory',
+    handler: querySummaryByCategory,
+  },
   {
     path: '/queryByPage',
     handler: queryByPage,

@@ -101,7 +101,9 @@ Page({
 
   // 查询提醒事项信息
   async queryReminderInfo(page?: number, pageSize?: number) {
+    // 查询提醒事项头数据
     this.queryReminderHeader()
+    // 查询提醒事项明细列表
     this.queryReminderItems(page, pageSize)
   },
 

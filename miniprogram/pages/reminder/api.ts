@@ -2,6 +2,15 @@ import { REMINDER_REQUEST_PATH_PREFIX } from "../../constants/request"
 import request from "../../utils/request"
 import { Reminder } from "./types"
 
+// 获取分类统计数据
+export async function querySummaryByCategory() {
+  const { data } = await request({
+    url: `${REMINDER_REQUEST_PATH_PREFIX}/querySummaryByCategory`
+  })
+
+  return data
+}
+
 export async function queryByPage(page: number, pageSize: number) {
   const { data } = await request({
     url: `${REMINDER_REQUEST_PATH_PREFIX}/queryByPage?page=${page}&pageSize=${pageSize}`
