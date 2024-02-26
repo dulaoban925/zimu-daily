@@ -1,4 +1,5 @@
 <!-- 账簿明细页面 -->
+<wxs src="account-book-item.wxs" module="tools" ></wxs>
 <view class="account-book-item page-container">
   <view class="item-amount cell">
     <view class="label">交易金额</view>
@@ -32,6 +33,10 @@
     <view class="label">备注</view>
     <textarea value="{{itemInfo.comment}}" auto-height placeholder="记录点什么..." data-field="comment" bindinput="handleInput" />
   </view>
+  <view class="item-comment cell operation-buttons">
+    <van-button round size="small" bind:click="handleSelectTransactionTimeClick">{{ itemInfo.transactionTime || '交易时间' }}</van-button>
+    <van-button round size="small" bind:click="handleShareClick">共享账本</van-button>
+  </view>
   <view class="bottom-buttons">
     <text class="text-button" bind:tap="handleAddMoreTap">再记一笔</text>
     <van-button type="info" round bind:click="handleConfirmClick">
@@ -40,4 +45,13 @@
   </view>
   <!-- 消息提示实例 -->
   <van-notify id="van-notify" />
+  <!-- 交易时间选择弹出层 -->
+  <datepicker-popup 
+    show="{{showTransactionTimePicker}}" 
+    value="{{tools.transformDateStrToTime(itemInfo.transactionTime)}}"
+    bind:close="handleDatePickerPopupClose"
+    bind:confirm="handleDatePickerPopupConfirm" />
+  <!-- 共享账本选择弹出层 -->
+  <list-selector-popup 
+    show="{{showShare}}" />
 </view>

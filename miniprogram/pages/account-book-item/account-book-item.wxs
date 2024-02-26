@@ -1,0 +1,15 @@
+/**
+ * 将日期字符串转化为 time
+ * @param dateStr 合法的日期字符串
+ */
+function transformDateStrToTime(dateStr) {
+  if (!dateStr) return '';
+  var dateTime = Date.parse(dateStr);
+  // 校验 dateStr 是否能转化为有效日期
+  if (isNaN(dateTime)) return '';
+  return dateTime;
+}
+
+module.exports = {
+  transformDateStrToTime: transformDateStrToTime
+}

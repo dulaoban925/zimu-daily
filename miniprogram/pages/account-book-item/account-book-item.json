@@ -1,3 +1,6 @@
 {
-  "usingComponents": {}
+  "usingComponents": {
+    "datepicker-popup": "../../components/datepicker-popup/datepicker-popup",
+    "list-selector-popup": "../../components/list-selector-popup/list-selector-popup"
+  }
 }

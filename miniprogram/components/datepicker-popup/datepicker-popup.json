@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "van-popup": "../../miniprogram_npm/@vant/weapp/popup/index",
+    "van-datetime-picker": "../../miniprogram_npm/@vant/weapp/datetime-picker/index"
+  }
+}

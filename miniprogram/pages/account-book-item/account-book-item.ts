@@ -48,7 +48,13 @@ Page({
     // 支出用途数组
     ExpenseSourceArray,
     // 当前操作
-    operation: PAGE_OPERATION.NEW // 默认新建
+    operation: PAGE_OPERATION.NEW, // 默认新建
+    // 交易时间选择弹出层显隐标识
+    showTransactionTimePicker: false,
+    // 共享占本选择弹出层显隐
+    showShareSelector: false,
+    // 共享账本选择弹出层显隐
+    showShare: false
   },
 
   /**
@@ -162,6 +168,36 @@ Page({
     if (this.data.itemInfo.source === source) return
     this.setData({
       'itemInfo.source': source
+    })
+  },
+
+  // 点击选择交易时间按钮
+  handleSelectTransactionTimeClick() {
+    this.setData({
+      showTransactionTimePicker: true
+    })
+  },
+
+  // 关闭选择交易时间弹出层
+  handleDatePickerPopupClose() {
+    this.setData({
+      showTransactionTimePicker: false
+    })
+  },
+
+  // 选择交易时间弹出层确认
+  handleDatePickerPopupConfirm(e: WechatMiniprogram.CustomEvent) {
+    const value = dayjs(e.detail.detail).format('YYYY-MM-DD HH:mm:ss')
+    this.setData({
+      showTransactionTimePicker: false,
+      'itemInfo.transactionTime': value
+    })
+  },
+
+  // 点击共享账本按钮
+  handleShareClick() {
+    this.setData({
+      showShareSelector: true
     })
   },
 

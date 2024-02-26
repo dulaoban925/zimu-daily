@@ -1,4 +1,4 @@
-import { REMINDER_SUMMARY_CATEGORY } from '@/enums/reminder'
+import { REMINDER_SUMMARY_CATEGORY } from '../enums/reminder'
 import ReminderItem from '../models/reminder-item'
 import { REQUEST_PARAMS_ERROR_CODE, ZiMuError } from '../utils/error'
 import {

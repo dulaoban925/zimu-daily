@@ -70,6 +70,14 @@
   padding: var(--common-padding-margin) 0;
 }
 
+.operation-buttons .van-button--default {
+  color: var(--color-primary);
+}
+
+.operation-buttons van-button:not(:last-child) {
+  margin-right: var(--common-padding-margin);
+}
+
 .bottom-buttons {
   width: 100%;
   position: fixed;

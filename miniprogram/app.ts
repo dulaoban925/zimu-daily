@@ -1,7 +1,7 @@
 // app.ts
 App<IAppOption>({
   globalData: {
-    serverPrefix: 'http://10.181.51.176:3000'
+    serverPrefix: 'http://10.181.51.175:3000'
   },
   onLaunch() {
     // 展示本地存储能力
