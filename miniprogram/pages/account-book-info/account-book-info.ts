@@ -162,7 +162,7 @@ Page({
   handleEditDetailItem(e: WechatMiniprogram.BaseEvent) {
     const id = e.currentTarget.dataset.id
     navigateTo({
-      url: `/pages/account-book-item/account-book-item?id=${id}`
+      url: `/pages/account-book-item/account-book-item?id=${id}&curAbId=${this.data.info.id}`
     })
   },
 

@@ -61,7 +61,8 @@ Component({
     },
 
     // 确认选择
-    onConfirm(value: string) {
+    onConfirm(e: WechatMiniprogram.CustomEvent) {
+      const value = e.detail
       console.log(value)
       this.triggerEvent('confirm', value)
     },

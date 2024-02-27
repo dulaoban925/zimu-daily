@@ -1,0 +1,23 @@
+.operation-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--common-padding-margin);
+}
+
+.operation-bar .confirm-btn {
+  color: var(--color-primary);
+}
+
+.operation-bar .cancel-btn {
+  color: var(--color-gray-6);
+}
+
+.single-selected {
+  background-color: var(--color-primary-lighter-5) !important;
+}
+
+.custom-icon {
+  color: var(--color-primary);
+  margin-right: var(--common-padding-margin);
+}

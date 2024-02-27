@@ -1,0 +1,35 @@
+/**
+ * 获取列表项 key 值
+ * @param item 行项目数据
+ * @param keyMap 自定义的字段集合
+ */
+function getFieldValue(item, fieldMap, field) {
+  var fieldInMap = fieldMap[field];
+  return fieldInMap ? item[fieldInMap] : 'no-match';
+}
+
+/**
+ * 多选模式下，当前行是否为已勾选状态
+ * @param multible 是否为多选
+ * @param selected 选中的 id 数组
+ * @param row 当前行数据对象
+ */
+function multibleRowSelected(multible, selected, row) {
+  return multible && selected.length > 0 && selected.indexOf(row.id) > -1;
+}
+
+/**
+ * 单选模式下，当前行是否为已勾选状态
+ * @param multible 是否为多选
+ * @param selected 选中的 id 数组
+ * @param row 当前行数据对象
+ */
+function singleRowSelected(multible, selected, row) {
+  return !multible && selected.length > 0 && selected.indexOf(row.id) > -1;
+}
+
+module.exports = {
+  getFieldValue: getFieldValue,
+  multibleRowSelected: multibleRowSelected,
+  singleRowSelected: singleRowSelected
+}

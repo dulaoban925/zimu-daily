@@ -1,1 +1,36 @@
 <!-- 列表选择弹出层 -->
+<wxs src="list-selector-popup.wxs" module="tools"></wxs>
+<van-popup
+  show="{{show}}"
+  z-index="{{zIndex}}"
+  overlay="{{overlay}}"
+  position="{{position}}"
+  round="{{round}}"
+  custom-style="{{popupCustomStyle}}"
+  overlay-style="{{popupOverlayStyle}}"
+  close-on-click-overlay="{{closeOnClickOverlay}}"
+  bind:close="onClose">
+  <view wx:if="{{multible}}" class="operation-bar">
+    <text class="cancel-btn" bind:tap="onClose">取消</text>
+    <text class="confirm-btn" bind:tap="onConfirm">确定</text>
+  </view>
+  <van-cell-group>
+    <van-cell 
+      wx:for="{{data}}" 
+      wx:key="id"
+      center="{{true}}"
+      title="{{tools.getFieldValue(item, customFieldMap, 'title')}}"
+      label="{{tools.getFieldValue(item, customFieldMap, 'label')}}"
+      value="{{tools.getFieldValue(item, customFieldMap, 'value')}}"
+      custom-class="{{tools.singleRowSelected(multible, selected, item) ? 'single-selected' : ''}}"
+      bind:click="onRowClick"
+      data-id="{{item.id}}">
+      <!-- 多选时展示勾选表示 -->
+      <van-icon 
+        slot="icon"
+        wx:if="{{tools.multibleRowSelected(multible, selected, item)}}" 
+        name="success"
+        class="custom-icon" />
+    </van-cell>
+  </van-cell-group>
+</van-popup>

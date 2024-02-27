@@ -48,22 +48,39 @@ const queryList = async (params: AccountBookItemQueryParams) => {
   }
 }
 
-const insert = async (params: AccountBookItemInstance) => {
-  const accountBookItem = await AccountBookItem.create(params)
+/**
+ * 插入关联的账本
+ */
+const insertRelatedAccountBooks = async (
+  itemId: string,
+  relatedIds: string[]
+) => {
+  // 1.清空已关联数据
+  await RelationAccountBookItem.destroy({
+    where: {
+      accountBookItemId: itemId,
+    },
+  })
 
-  const relatedIds = new Set((params.relatedIds ?? []).concat(params.parentId))
-
+  // 2.插入最新关联数据
   const relations: RelationAccountBookItemAttributes[] = Array.from(
     relatedIds
   ).map((id: string) => ({
     id: uuidV4(),
     accountBookId: id,
-    accountBookItemId: params.id,
+    accountBookItemId: itemId,
     createdBy: 'admin',
     updatedBy: 'admin',
   }))
 
   await RelationAccountBookItem.bulkCreate(relations)
+}
+
+const insert = async (params: AccountBookItemInstance) => {
+  const accountBookItem = await AccountBookItem.create(params)
+
+  const relatedIds = new Set((params.relatedIds ?? []).concat(params.parentId))
+  await insertRelatedAccountBooks(params.id, [...relatedIds])
 
   return accountBookItem
 }
@@ -94,6 +111,10 @@ const updateById = async (params: AccountBookItemInstance) => {
       id,
     },
   })
+
+  const relatedIds = new Set((params.relatedIds ?? []).concat(params.parentId))
+
+  await insertRelatedAccountBooks(id, [...relatedIds])
 
   const accountBookItem = await queryById({ id })
 

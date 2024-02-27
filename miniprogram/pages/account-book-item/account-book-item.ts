@@ -1,35 +1,12 @@
-import { ACCOUNT_BOOK_ITEM_TYPES, ACCOUNT_BOOK_ITEM_INCOME_SOURCE, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE, ACCOUNT_BOOK_ITEM_INCOME_SOURCE_DESC, ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE_DESC, ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON } from '../../constants/account-book'
+import { ACCOUNT_BOOK_ITEM_TYPES } from '../../constants/account-book'
+import { DefaultTypeSourceMap, IncomeSourceArray, ExpenseSourceArray, InitItemInfo} from './constants'
 import { PAGE_OPERATION } from '../../constants/data'
 import { insert, queryById, updateById } from './api'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import { AccountBookItem } from './types'
 import dayjs from 'dayjs'
-
-// type 和 source 默认选中映射
-const DefaultTypeSourceMap = {
-  [ACCOUNT_BOOK_ITEM_TYPES.INCOME]: ACCOUNT_BOOK_ITEM_INCOME_SOURCE.INCOME_SALARY,
-  [ACCOUNT_BOOK_ITEM_TYPES.EXPENSE]: ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE.EXPENSE_RENT
-}
-
-// 明细用途相关汇总
-const IncomeSourceArray = Object.entries(ACCOUNT_BOOK_ITEM_INCOME_SOURCE_DESC).map(([key, label]) => ({
-  key,
-  label,
-  icon: ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON[key]
-}))
-
-const ExpenseSourceArray = Object.entries(ACCOUNT_BOOK_ITEM_EXPONSE_SOURCE_DESC).map(([key, label]) => ({
-  key,
-  label,
-  icon: ACCOUNT_BOOK_ITEM_IE_SOURCE_ICON[key]
-}))
-
-const InitItemInfo = {
-  amount: 0,
-  type: ACCOUNT_BOOK_ITEM_TYPES.INCOME,
-  source: ACCOUNT_BOOK_ITEM_INCOME_SOURCE.INCOME_SALARY,
-  transactionTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-}
+import { queryList } from '../account-book/apis'
+import { AccountBook } from '../account-book/types'
 
 Page({
 
@@ -41,6 +18,8 @@ Page({
     itemInfo: {
       ...InitItemInfo
     } as AccountBookItem,
+    // 当前详情所处账本id，可能为创建时的账本id（与 parentId 相同）或共享账本id（与 parentId 不同, 通过 curAbId 参数传入）
+    currentAbId: '',
     // 收支类型
     ACCOUNT_BOOK_ITEM_TYPES,
     // 收入来源数组
@@ -51,10 +30,16 @@ Page({
     operation: PAGE_OPERATION.NEW, // 默认新建
     // 交易时间选择弹出层显隐标识
     showTransactionTimePicker: false,
-    // 共享占本选择弹出层显隐
-    showShareSelector: false,
     // 共享账本选择弹出层显隐
-    showShare: false
+    showShareSelector: false,
+    // 分享的账本
+    shareAbs: [],
+    // 分享账本弹出层加载状态
+    sharePopupLoading: false,
+    // 分享账本弹出层字段映射
+    sharePopupFieldMap: {
+      title: 'name'
+    }
   },
 
   /**
@@ -62,18 +47,21 @@ Page({
    */
   onLoad(query: {
     parentId?: string
-    id?: string
+    id?: string,
+    curAbId?: string
   }) {
     // 新建明细，传递 parentId
     if (query.parentId) {
       this.setData({
         'itemInfo.parentId': query.parentId,
+        currentAbId: query.parentId
       })
     }
     // 编辑/查看明细，传递 id
     if (query.id) {
       this.setData({
         'itemInfo.id': query.id,
+        currentAbId: query.curAbId,
         operation: PAGE_OPERATION.EDIT
       })
     }
@@ -187,7 +175,7 @@ Page({
 
   // 选择交易时间弹出层确认
   handleDatePickerPopupConfirm(e: WechatMiniprogram.CustomEvent) {
-    const value = dayjs(e.detail.detail).format('YYYY-MM-DD HH:mm:ss')
+    const value = dayjs(e.detail as unknown as number).format('YYYY-MM-DD HH:mm:ss')
     this.setData({
       showTransactionTimePicker: false,
       'itemInfo.transactionTime': value
@@ -197,8 +185,38 @@ Page({
   // 点击共享账本按钮
   handleShareClick() {
     this.setData({
-      showShareSelector: true
+      sharePopupLoading: true
     })
+    // 查询账本
+    queryList()
+      .then((res) => {
+        this.setData({
+          shareAbs: res.filter((r: AccountBook) => r.id !== this.data.currentAbId),
+          showShareSelector: true
+        })
+      })
+      .finally(() => {
+        this.setData({
+          sharePopupLoading: false
+        })
+      })
+  },
+
+  // 关闭共享账本
+  handleShareSelectorClose() {
+    this.setData({
+      showShareSelector: false
+    })
+  },
+
+  // 确认共享账本
+  handleShareSelectorConfirm(e: WechatMiniprogram.CustomEvent) {
+    const value = e.detail
+    console.log(value)
+    this.setData({
+      'itemInfo.relatedIds': value
+    })
+    this.handleShareSelectorClose()
   },
 
   // 再记一笔

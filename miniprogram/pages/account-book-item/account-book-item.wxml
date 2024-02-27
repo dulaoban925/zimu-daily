@@ -53,5 +53,12 @@
     bind:confirm="handleDatePickerPopupConfirm" />
   <!-- 共享账本选择弹出层 -->
   <list-selector-popup 
-    show="{{showShare}}" />
+    show="{{showShareSelector}}"
+    data="{{shareAbs}}"
+    loading="{{sharePopupLoading}}"
+    field-map="{{sharePopupFieldMap}}"
+    selected="{{itemInfo.relatedIds}}"
+    multible="{{true}}"
+    bind:close="handleShareSelectorClose"
+    bind:confirm="handleShareSelectorConfirm" />
 </view>

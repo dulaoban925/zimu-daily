@@ -13,6 +13,14 @@ export async function queryByPage(page: number, pageSize: number) {
   return data
 }
 
+export async function queryList() {
+  const { data } = await request({
+    url: `${ACCOUNT_BOOK_REQUEST_PATH_PREFIX}/queryList`
+  })
+
+  return data
+}
+
 export async function insert(params: AccountBook) {
   const { data } = await request({
     url: `${ACCOUNT_BOOK_REQUEST_PATH_PREFIX}/insert`,
