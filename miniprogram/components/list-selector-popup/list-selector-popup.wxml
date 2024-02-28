@@ -22,13 +22,13 @@
       title="{{tools.getFieldValue(item, customFieldMap, 'title')}}"
       label="{{tools.getFieldValue(item, customFieldMap, 'label')}}"
       value="{{tools.getFieldValue(item, customFieldMap, 'value')}}"
-      custom-class="{{tools.singleRowSelected(multible, selected, item) ? 'single-selected' : ''}}"
+      custom-class="{{tools.singleRowSelected(multible, actualSelected, item) ? 'single-selected' : ''}}"
       bind:click="onRowClick"
       data-id="{{item.id}}">
       <!-- 多选时展示勾选表示 -->
       <van-icon 
         slot="icon"
-        wx:if="{{tools.multibleRowSelected(multible, selected, item)}}" 
+        wx:if="{{tools.multibleRowSelected(multible, actualSelected, item)}}" 
         name="success"
         class="custom-icon" />
     </van-cell>

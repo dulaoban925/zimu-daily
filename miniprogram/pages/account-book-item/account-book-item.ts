@@ -121,7 +121,7 @@ Page({
     queryById(id)
       .then((data) => {
         this.setData({
-          itemInfo: data
+          itemInfo: data,
         })
       })
       .catch(e => {
@@ -133,7 +133,6 @@ Page({
   handleInput(e: WechatMiniprogram.CustomEvent) {
     const field = e.currentTarget.dataset.field
     const value = e.detail.value
-    console.log(field, value)
     this.setData({
       [`itemInfo.${field}`]: value
     })
@@ -152,7 +151,6 @@ Page({
   // 切换交易用途
   handleSourceClick(e: WechatMiniprogram.BaseEvent) {
     const source = e.currentTarget.dataset.source
-    console.log(this.data.itemInfo.source, source)
     if (this.data.itemInfo.source === source) return
     this.setData({
       'itemInfo.source': source
@@ -212,7 +210,6 @@ Page({
   // 确认共享账本
   handleShareSelectorConfirm(e: WechatMiniprogram.CustomEvent) {
     const value = e.detail
-    console.log(value)
     this.setData({
       'itemInfo.relatedIds': value
     })

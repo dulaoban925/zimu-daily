@@ -112,7 +112,7 @@ const updateById = async (params: AccountBookItemInstance) => {
     },
   })
 
-  const relatedIds = new Set((params.relatedIds ?? []).concat(params.parentId))
+  const relatedIds = new Set(params.relatedIds ?? [])
 
   await insertRelatedAccountBooks(id, [...relatedIds])
 
@@ -129,6 +129,20 @@ const queryById = async (params: { id: string }) => {
       id,
     },
   })
+
+  if (accountBookItem) {
+    // 查询关联的账本
+    const relatedAccountBooks = await RelationAccountBookItem.findAll({
+      attributes: ['accountBookId'],
+      where: {
+        accountBookItemId: id,
+      },
+    })
+
+    accountBookItem.relatedIds = relatedAccountBooks.map(
+      (item) => item.accountBookId
+    )
+  }
 
   return accountBookItem
 }

@@ -66,36 +66,22 @@ Component({
     /** 列表属性 end */
   },
   data: {
-    customFieldMap: INIT_FIELD_MAP
-  },
-  lifetimes: {
-    attached() {
-      console.log(this.data)
-      const {customFieldMap, fieldMap} = this.data
-      // 合并 fieldMap
-      this.setData({
-        customFieldMap: Object.assign(customFieldMap, fieldMap)
-      })
-    }
+    customFieldMap: INIT_FIELD_MAP,
+    actualSelected: []
   },
   methods: {
     /**
      * 关闭弹出层
      */
     onClose() {
-      // 关闭前重置选中的数据，以上层使用传入的 selected 为准
-      this.setData({
-        selected: []
-      })
-      console.log('onClose', this.data.selected)
       this.triggerEvent('close')
     },
     /**
      * 确定
      */
     onConfirm() {
-      const { multible, selected } = this.data
-      const confirmValue = multible ? selected : selected[0]
+      const { multible, actualSelected } = this.data
+      const confirmValue = multible ? actualSelected : actualSelected[0]
 
       this.triggerEvent('confirm', confirmValue)
     },
@@ -105,31 +91,43 @@ Component({
      */
     onRowClick(e: WechatMiniprogram.BaseEvent) {
       const rowId = e.currentTarget.dataset.id
-      const { multible, selected } = this.data
+      const { multible, actualSelected } = this.data
       
       // 是否已经存在 id
-      const existId = selected.length > 0 && selected.includes(rowId)
+      const existId = actualSelected.length > 0 && actualSelected.includes(rowId)
 
       if (multible && existId) {
         // 若为多选，且已存在，则删除
-        const index = selected.indexOf(rowId)
-        selected.splice(index, 1)
+        const index = actualSelected.indexOf(rowId)
+        actualSelected.splice(index, 1)
         this.setData({
-          selected: selected
+          actualSelected: actualSelected
         })
       } else if (multible && !existId) {
         // 若为多选，且不存在，则新增
-        selected.push(rowId)
+        actualSelected.push(rowId)
         this.setData({
-          selected: selected
+          actualSelected: actualSelected
         })
       } else if (!multible && !existId) {
         // 若为单选，且不存在，则触发确定事件
         this.setData({
-          selected: [rowId]
+          actualSelected: [rowId]
         })
         this.onConfirm()
       }
+    }
+  },
+  observers: {
+    show: function (value: boolean) {
+      if (!value) return
+      const {customFieldMap, fieldMap, selected} = this.data
+      // 合并 fieldMap
+      this.setData({
+        customFieldMap: Object.assign({}, customFieldMap, fieldMap),
+        actualSelected: [...selected]
+      })
+      console.log(this.data)
     }
   }
 })
