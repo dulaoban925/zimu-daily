@@ -14,7 +14,7 @@
 }
 
 .single-selected {
-  background-color: var(--color-primary-lighter-5) !important;
+  background-color: var(--color-primary-lighter-4) !important;
 }
 
 .custom-icon {

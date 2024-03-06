@@ -42,6 +42,8 @@ Component({
       type: Boolean,
       value: true
     },
+    // 最大高度
+    maxHeight: String,
     /** 弹出层属性 end */
     /** 列表属性 start */
     // 列表数据
@@ -61,6 +63,7 @@ Component({
     },
     selected: {
       type: Array,
+      optionalTypes: [String],
       value: []
     }
     /** 列表属性 end */
@@ -121,11 +124,11 @@ Component({
   observers: {
     show: function (value: boolean) {
       if (!value) return
-      const {customFieldMap, fieldMap, selected} = this.data
+      const { customFieldMap, fieldMap, selected } = this.data
       // 合并 fieldMap
       this.setData({
         customFieldMap: Object.assign({}, customFieldMap, fieldMap),
-        actualSelected: [...selected]
+        actualSelected: Array.isArray(selected) ? [...selected] : [selected]
       })
       console.log(this.data)
     }

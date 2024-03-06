@@ -1,4 +1,6 @@
 {
   "enablePullDownRefresh": true,
-  "usingComponents": {}
+  "usingComponents": {
+    "list-selector-popup": "../../components/list-selector-popup/list-selector-popup"
+  }
 }

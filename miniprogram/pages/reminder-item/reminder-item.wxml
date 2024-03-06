@@ -30,7 +30,9 @@
   </van-cell-group>
   <van-cell-group custom-class="priority-info info-block">
     <van-cell is-link center title="优先级" value="{{ REMINDER_PRIORITY_DESC[reminderItem.priority] || '' }}" bind:click="handlePriorityClick" />
+    <van-cell is-link center title="列表" bind:click="handleListSelectorClick" />
   </van-cell-group>
+  
   <view class="bottom-buttons cell">
     <text class="text-button" bind:tap="handleAddMoreClick">再记一项</text>
     <van-button type="info" round bind:click="handleConfirmClick">
@@ -58,4 +60,13 @@
     close-on-click-overlay
     bind:select="handlePriorityActionSelect"
   />
+  <!-- 列表选择 -->
+  <list-selector-popup 
+    show="{{showListSelector}}"
+    data="{{reminderList}}"
+    loading="{{listSelectorLoading}}"
+    field-map="{{ listSelectorFieldMap }}"
+    selected="{{reminderItem.parentId}}"
+    bind:close="handleListSelectorClose"
+    bind:confirm="handleListSelectorConfirm" />
 </view>

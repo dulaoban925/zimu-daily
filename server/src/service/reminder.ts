@@ -8,21 +8,23 @@ import dayjs from 'dayjs'
 
 // 获取统计指标
 const querySummaryByCategory = async () => {
-  // 今天 - 提醒日期早于今天的事项
+  // 今天 - 提醒日期今天及以前的事项
   const today = await ReminderItem.count({
     where: {
       finished: 'N',
       remindTime: {
+        [Op.not]: null,
         [Op.lte]: new Date(`${dayjs().format('YYYY-MM-DD')} 23:59:59`),
       },
     },
   })
-  // 计划 - 提醒日期晚于今天的事项
+  // 计划 - 提醒日期今天及以后的事项
   const plan = await ReminderItem.count({
     where: {
       finished: 'N',
       remindTime: {
-        [Op.gt]: new Date(`${dayjs().format('YYYY-MM-DD')} 23:59:59`),
+        [Op.not]: null,
+        [Op.gte]: new Date(`${dayjs().format('YYYY-MM-DD')} 00:00:00`),
       },
     },
   })
@@ -65,6 +67,17 @@ const queryByPage = async (params: ZiMu.PageQuery) => {
     totalPages: Math.ceil(count / pageSize),
     page,
     pageSize,
+    data: rows,
+  }
+}
+
+const queryList = async () => {
+  const { count, rows } = await Reminder.findAndCountAll({
+    order: [['createdAt', 'DESC']],
+  })
+
+  return {
+    total: count,
     data: rows,
   }
 }
@@ -115,6 +128,7 @@ const queryById = async (params: { id: string }) => {
 export {
   querySummaryByCategory,
   queryByPage,
+  queryList,
   insert,
   deleteById,
   updateById,

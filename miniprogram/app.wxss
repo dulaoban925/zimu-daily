@@ -3,11 +3,11 @@
 page {
   --common-padding-margin: 20rpx;
   --color-primary: #3a8af2;
-  --color-primary-lighter-1: #3a8af2;
-  --color-primary-lighter-2: #66adff;
-  --color-primary-lighter-3: #8fc7ff;
-  --color-primary-lighter-4: #b8deff;
-  --color-primary-lighter-5: #e0f2ff;
+  --color-primary-lighter-1: #66adff;
+  --color-primary-lighter-2: #8fc7ff;
+  --color-primary-lighter-3: #b8deff;
+  --color-primary-lighter-4: #e0f2ff;
+  --color-primary-lighter-5: #f0f9ff;
   --color-warn: #f29c73;
   --color-danger: #dc3131;
   --color-white: #ffffff;

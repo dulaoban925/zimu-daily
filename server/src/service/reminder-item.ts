@@ -5,11 +5,28 @@ import {
   ReminderItemInstance,
   ReminderItemQueryParams,
 } from 'business/reminder'
+import { Op } from 'sequelize'
+import dayjs from 'dayjs'
 
+// 分类查询的 where 参数对象映射
 const CategoryWhereMap = {
-  [REMINDER_SUMMARY_CATEGORY.T]: {},
-  [REMINDER_SUMMARY_CATEGORY.P]: {},
-  [REMINDER_SUMMARY_CATEGORY.A]: {},
+  [REMINDER_SUMMARY_CATEGORY.T]: {
+    finished: 'N',
+    remindTime: {
+      [Op.not]: null,
+      [Op.lte]: new Date(`${dayjs().format('YYYY-MM-DD')} 23:59:59`),
+    },
+  },
+  [REMINDER_SUMMARY_CATEGORY.P]: {
+    finished: 'N',
+    remindTime: {
+      [Op.not]: null,
+      [Op.gte]: new Date(`${dayjs().format('YYYY-MM-DD')} 00:00:00`),
+    },
+  },
+  [REMINDER_SUMMARY_CATEGORY.A]: {
+    finished: 'N',
+  },
 }
 
 const queryByPage = async (params: ReminderItemQueryParams) => {

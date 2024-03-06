@@ -3,7 +3,9 @@ import { PAGE_OPERATION, Y_N } from "../../constants/data";
 import { REMINDER_PRIORITY_DESC } from "../../constants/reminder";
 import Notify from "../../miniprogram_npm/@vant/weapp/notify/notify";
 import { insert, queryById, updateById } from "./api";
+import { queryList as queryReminderList } from '../reminder/api'
 import { ReminderItem } from "./types";
+import { Reminder } from "../reminder/types";
 
 // pages/reminder-item/reminder-item.ts
 Page({
@@ -24,7 +26,17 @@ Page({
     // 选择提醒时间
     showRemindTimeAction: false,
     // 页面操作
-    _operation: 'new'
+    _operation: 'new',
+    // 是否展示列表选择弹出层
+    showListSelector: false,
+    // 列表选择弹出层展示的代办列表
+    reminderList: [] as Reminder[],
+    // 列表选择加载标识
+    listSelectorLoading: false,
+    // 列表选择弹出层字段映射
+    listSelectorFieldMap: {
+      title: 'name'
+    }
   },
 
   /**
@@ -167,11 +179,45 @@ Page({
   // 选择优先级
   handlePriorityActionSelect(e: WechatMiniprogram.CustomEvent) {
     const selected = e.detail
-    console.log(selected)
     this.setData({
       'reminderItem.priority': selected.value,
       showPriorityAction: false
     })
+  },
+
+  // 打开选择列表弹出层
+  handleListSelectorClick() {
+    this.setData({
+      showListSelector: true,
+      listSelectorLoading: true
+    })
+    queryReminderList()
+      .then((data) => {
+        this.setData({
+          reminderList: [...data]
+        })
+      })
+      .finally(() => {
+        this.setData({
+          listSelectorLoading: false
+        })
+      })
+  },
+
+  // 关闭选择列表弹出层
+  handleListSelectorClose() {
+    this.setData({
+      showListSelector: false
+    })
+  },
+
+  // 确认选择列表
+  handleListSelectorConfirm(e: WechatMiniprogram.CustomEvent) {
+    const selected = e.detail
+    this.setData({
+      'reminderItem.parentId': selected
+    })
+    this.handleListSelectorClose()
   },
 
   // 再记一项

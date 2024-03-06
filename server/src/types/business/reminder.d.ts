@@ -23,7 +23,7 @@ interface ReminderItemAttributes {
   parentId: string
   title: string
   remindFlag: string
-  remindTime: string
+  remindTime: string | null | undefined
   priority: string
   comment: string
   finished: string

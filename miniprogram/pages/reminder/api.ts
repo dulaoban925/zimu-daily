@@ -19,6 +19,15 @@ export async function queryByPage(page: number, pageSize: number) {
   return data
 }
 
+// 查询所有代办列表
+export async function queryList() {
+  const { data } = await request({
+    url: `${REMINDER_REQUEST_PATH_PREFIX}/queryList`
+  })
+
+  return data
+}
+
 // 根据提醒事项 id 查询详情
 export async function queryById(id: string): Promise<Reminder> {
   const { data } = await request({

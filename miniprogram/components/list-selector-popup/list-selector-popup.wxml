@@ -9,6 +9,7 @@
   custom-style="{{popupCustomStyle}}"
   overlay-style="{{popupOverlayStyle}}"
   close-on-click-overlay="{{closeOnClickOverlay}}"
+  custom-style="max-height: {{ maxHeight || '70%' }}"
   bind:close="onClose">
   <view wx:if="{{multible}}" class="operation-bar">
     <text class="cancel-btn" bind:tap="onClose">取消</text>
