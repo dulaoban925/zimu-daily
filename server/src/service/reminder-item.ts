@@ -71,6 +71,20 @@ const deleteById = async (params: { id: string }) => {
   return true
 }
 
+const batchDelete = async (params: { ids: string[] }) => {
+  const ids = params.ids
+  if (!ids) throw new ZiMuError(REQUEST_PARAMS_ERROR_CODE, '参数 ids 不存在')
+  await ReminderItem.destroy({
+    where: {
+      id: {
+        [Op.in]: ids,
+      },
+    },
+  })
+
+  return true
+}
+
 const updateById = async (params: ReminderItemInstance) => {
   const id = params.id
   if (!id) throw new ZiMuError(REQUEST_PARAMS_ERROR_CODE, '参数 id 不存在')
@@ -103,4 +117,5 @@ export default {
   deleteById,
   updateById,
   queryById,
+  batchDelete,
 }

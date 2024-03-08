@@ -1,0 +1,5 @@
+<!-- 下方固定操作栏 -->
+<view class="bottom-operation-bar">
+  <view><slot name="left"></slot></view>
+  <view><slot name="right"></slot></view>
+</view>

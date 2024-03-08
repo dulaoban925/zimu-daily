@@ -77,25 +77,14 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    // 重置 _page _pageSize
-    this.setData({
-      _page: defaultPage, // 当前页
-      _pageSize: defaultPageSize, // 每页数据量
-    })
-    this.init()
-      .then(() => {
-        wx.stopPullDownRefresh()
-      })
+
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-    const {_page} = this.data
-    const nextPage = _page + 1
 
-    this.queryReminders(nextPage)
   },
 
   /**

@@ -1,0 +1,12 @@
+function getBottomOperationClass(selectedItems, btnType) {
+  return selectedItems.length > 0 ? btnType + '-text' : 'disabled-text'
+}
+
+function isItemChecked(selectedItems, id) {
+  return selectedItems.indexOf(id) > -1
+}
+
+module.exports = {
+  getBottomOperationClass: getBottomOperationClass,
+  isItemChecked: isItemChecked
+}

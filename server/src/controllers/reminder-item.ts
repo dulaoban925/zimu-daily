@@ -9,6 +9,7 @@ const reminderItemBaseController: BaseController =
 
 const reminderItemController = {
   ...reminderItemBaseController,
+  batchDelete: reminderItemService.batchDelete,
 }
 
 export default reminderItemController

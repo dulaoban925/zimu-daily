@@ -11,9 +11,12 @@
 }
 
 .list-scroll-view {
-  /** 处理 iphoneX + 底部安全距离*/
-  height: calc(100vh - 146rpx - constant(safe-area-inset-bottom));
-  height: calc(100vh - 146rpx - env(safe-area-inset-bottom));
+  /** 
+    高度为：100vh - header高度 - bottomBar 高度 - 安全距离
+    处理iphoneX + 底部安全距离
+  */
+  height: calc(100vh - 146rpx - 40rpx - constant(safe-area-inset-bottom));
+  height: calc(100vh - 146rpx - 40rpx - env(safe-area-inset-bottom));
   box-sizing: border-box;
   padding: var(--common-padding-margin);
 }

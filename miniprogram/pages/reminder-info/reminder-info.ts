@@ -1,11 +1,20 @@
 import {REMINDER_CATEGORY_DESC, REMINDER_PRIORITY_MARK, REMINDER_PRIORITY_MARK_COLOR} from '../../constants/reminder'
 import {Y_N} from '../../constants/data'
-import { deleteById, queryByPage, updateById } from '../reminder-item/api'
+import { deleteById, queryByPage, updateById, batchDelete } from '../reminder-item/api'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
+import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 import { Reminder } from '../reminder/types'
 import { navigateTo } from '../../utils/rotuer'
 import { ReminderItem } from '../reminder-item/types'
 import { queryById as queryReminderById } from '../reminder/api'
+
+const OPERATION_KEYS = {
+  SELECTABLE: 'selectable'
+}
+
+const OPERATIONS = {
+  [OPERATION_KEYS.SELECTABLE]: '选择提醒事项'
+}
 
 Page({
   options: {
@@ -24,6 +33,17 @@ Page({
     refresherTriggered: false,
     REMINDER_PRIORITY_MARK,
     REMINDER_PRIORITY_MARK_COLOR,
+    // 是否可选择状态
+    selectable: false,
+    // 选择状态下勾选的代办事项
+    selectedItems: [] as string[],
+    // 展示操作列表
+    showOperationActions: false,
+    // 操作列表
+    operationActions: Object.entries(OPERATIONS).map(([value, name]: [string, string]) => ({
+      name,
+      value
+    })),
     // 列表初始化查询参数
     _initFilter: {
       byCategory: false,
@@ -61,7 +81,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow() {
-    this.queryReminderInfo()
+    this.init()
   },
 
   /**
@@ -100,11 +120,11 @@ Page({
   },
 
   // 查询提醒事项信息
-  async queryReminderInfo(page?: number, pageSize?: number) {
+  async init() {
     // 查询提醒事项头数据
     this.queryReminderHeader()
     // 查询提醒事项明细列表
-    this.queryReminderItems(page, pageSize)
+    this.queryReminderItems()
   },
 
   async queryReminderHeader() {
@@ -175,7 +195,7 @@ Page({
   },
 
   // 完成
-  onFinishedChange(e: WechatMiniprogram.CustomEvent) {
+  handleFinishedChange(e: WechatMiniprogram.CustomEvent) {
     const reminderItemId = e.currentTarget.dataset.id
     const value = e.detail
 
@@ -207,6 +227,82 @@ Page({
       })
       .catch(e => {
         Notify(`删除失败:${e.message}`)
+      })
+  },
+
+  // 展示操作列表
+  handleOperationTap() {
+    this.setData({
+      showOperationActions: true
+    })
+  },
+
+  // 关闭展示列表
+  handleOperationActionClose() {
+    this.setData({
+      showOperationActions: false
+    })
+  },
+
+  // 选中操作
+  handleOperationActionSelect(e: WechatMiniprogram.CustomEvent) {
+    const operation = e.detail.value
+    switch(operation) {
+      // 选择提醒事项
+      case OPERATION_KEYS.SELECTABLE:
+        this.setData({
+          selectable: true
+        })
+        break
+      default:
+        break
+    }
+  },
+
+  // 可选择状态下勾选行
+  handleSelecteChange(e: WechatMiniprogram.CustomEvent) {
+    const id = e.currentTarget.dataset.id
+    const selectedItems = this.data.selectedItems
+    
+    const index = selectedItems.indexOf(id)
+    if (index > -1) {
+      selectedItems.splice(index, 1)
+    } else {
+      selectedItems.push(id)
+    }
+
+    this.setData({
+      selectedItems: selectedItems
+    })
+  },
+
+  // 批量删除处理函数
+  batchDelHandler() {
+    batchDelete(this.data.selectedItems)
+    .then(() => {
+      Notify({ type: 'success', message: '删除成功' })
+      this.init()
+      this.setData({
+        selectable: false,
+        selectedItems: []
+      })
+    })
+    .catch((e: any) => {
+      Notify(`删除失败：${e.message}`)
+    })
+  },
+
+  // 批量删除
+  handleBatchDelTap() {
+    const selectedItems = this.data.selectedItems
+    if (selectedItems.length === 0) return
+
+    Dialog.confirm({
+      title: '警告',
+      message: '确认删除已选择的提醒事项？',
+    })
+      .then(async () => {
+        this.batchDelHandler()
       })
   }
 })

@@ -2,8 +2,15 @@ import { ZiMu } from 'zimu'
 import reminderItemController from '../controllers/reminder-item'
 import { generateRouterWithInterceptor } from '../utils/router'
 
-const { queryByPage, queryList, insert, deleteById, updateById, queryById } =
-  reminderItemController
+const {
+  queryByPage,
+  queryList,
+  insert,
+  deleteById,
+  updateById,
+  queryById,
+  batchDelete,
+} = reminderItemController
 
 // 所有路由
 export const routes: ZiMu.RouteDefine[] = [
@@ -33,6 +40,11 @@ export const routes: ZiMu.RouteDefine[] = [
   {
     path: '/queryById',
     handler: queryById,
+  },
+  {
+    path: '/batchDelete',
+    method: 'post',
+    handler: batchDelete,
   },
 ]
 

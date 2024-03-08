@@ -39,3 +39,15 @@ page {
   align-items: center;
   justify-content: flex-start;
 }
+
+.danger-text {
+  color: var(--color-danger);
+}
+
+.primary-text {
+  color: var(--color-primary);
+}
+
+.disabled-text {
+  color: var(--color-gray-5);
+}

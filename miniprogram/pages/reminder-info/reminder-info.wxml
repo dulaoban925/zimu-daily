@@ -1,8 +1,9 @@
 <!-- 提醒事项详情列表 -->
+<wxs src="reminder-info.wxs" module="tools" />
 <view class="reminder-info page-container">
   <view class="info-header">
     <text>{{ reminderHeader.name }}</text>
-    <van-icon size="25" name="add" bind:tap="handleAddTap" />
+    <van-icon size="25" name="ellipsis" bind:tap="handleOperationTap" />
   </view>
   <view class="info-list">
     <scroll-view 
@@ -38,12 +39,20 @@
             <text>{{item.comment}}</text>
             <text>{{item.remindTime || ''}}</text>
           </view>
-          <van-checkbox 
-            slot="icon" 
-            value="{{ item.finished === 'Y' }}" 
-            data-id="{{item.id}}" 
-            bind:change="onFinishedChange"
-            catch:tap="() => {}" />
+          <block slot="icon">
+            <van-checkbox 
+              wx:if="{{ selectable }}"
+              value="{{ tools.isItemChecked(selectedItems, item.id) }}" 
+              data-id="{{item.id}}" 
+              bind:change="handleSelectChange"
+              catch:tap="() => {}" />
+            <van-checkbox 
+              wx:else
+              value="{{ item.finished === 'Y' }}" 
+              data-id="{{item.id}}" 
+              bind:change="handleFinishedChange"
+              catch:tap="() => {}" />  
+          </block>
           </van-cell>
           <van-button 
             slot="right" 
@@ -58,6 +67,28 @@
       </block>
     </scroll-view>
   </view>
+  <!-- 底部操作栏 -->
+  <bottom-operation-bar>
+    <block wx:if="{{ selectable }}">
+      <text slot="right" class="{{ tools.getBottomOperationClass(selectedItems, 'primary') }}" bind:tap="handleBatchMoveTap">移到...</text>
+      <text slot="right" class="{{ tools.getBottomOperationClass(selectedItems, 'danger') }}" bind:tap="handleBatchDelTap">删除</text>
+    </block>
+    <block wx:else>
+      <view slot="left" class="flex-center-start primary-text" bind:tap="handleAddTap">
+        <van-icon size="25" name="add" />
+        <text> 新建提醒事项 </text>
+      </view>
+    </block>
+  </bottom-operation-bar>
+  <!-- 操作选项 -->
+  <van-action-sheet
+    show="{{ showOperationActions }}"
+    actions="{{ operationActions }}"
+    bind:select="handleOperationActionSelect"
+    bind:close="handleOperationActionClose"
+  />
   <!-- 消息提示实例 -->
   <van-notify id="van-notify" />
+  <!-- 弹窗实例，用于 API 调用 -->
+  <van-dialog id="van-dialog" />
 </view>

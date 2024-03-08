@@ -62,11 +62,11 @@
   />
   <!-- 列表选择 -->
   <list-selector-popup 
-    show="{{showListSelector}}"
-    data="{{reminderList}}"
-    loading="{{listSelectorLoading}}"
+    show="{{ showListSelector }}"
+    data="{{ reminderList }}"
+    loading="{{ listSelectorLoading }}"
     field-map="{{ listSelectorFieldMap }}"
-    selected="{{reminderItem.parentId}}"
+    selected="{{ reminderItem.parentId }}"
     bind:close="handleListSelectorClose"
     bind:confirm="handleListSelectorConfirm" />
 </view>

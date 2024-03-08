@@ -1,0 +1,16 @@
+.bottom-operation-bar {
+  width: 100%;
+  min-height: 40rpx;
+  position: fixed;
+  box-sizing: border-box;
+  padding: var(--common-padding-margin);
+  left: 0;
+  bottom: 0;
+  /** 处理 iphoneX + 底部安全距离*/
+  bottom: constant(safe-area-inset-bottom);
+  bottom: env(safe-area-inset-bottom);
+  background-color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
