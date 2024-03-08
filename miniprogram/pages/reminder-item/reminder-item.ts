@@ -176,6 +176,13 @@ Page({
     })
   },
 
+  // 关闭选择优先级弹出层
+  handlePriorityActionClose() {
+    this.setData({
+      showPriorityAction: false
+    })
+  },
+
   // 选择优先级
   handlePriorityActionSelect(e: WechatMiniprogram.CustomEvent) {
     const selected = e.detail
