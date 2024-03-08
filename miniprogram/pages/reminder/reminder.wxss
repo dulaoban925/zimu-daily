@@ -55,6 +55,20 @@
   justify-content: space-between;
 }
 
+.right-operations {
+  display: flex;
+  align-items: center;
+  font-weight: 400;
+}
+
+.selectable-btn {
+  margin-right: var(--common-padding-margin);
+}
+
+.batch-del-btn {
+  color: var(--color-danger);
+}
+
 .add-list-dialog-content {
   padding: 48rpx;
 }
@@ -66,4 +80,18 @@
   box-sizing: border-box;
   padding: var(--common-padding-margin);
   border-radius: var(--border-radius-default);
+}
+
+.reminder-item-cell .reminder-item-cell-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reminder-item-cell van-checkbox {
+  flex: none;
+}
+
+.reminder-item-cell van-cell {
+  flex: auto;
 }

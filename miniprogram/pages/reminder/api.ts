@@ -58,3 +58,17 @@ export async function deleteById(id: string) {
 
   return data
 }
+
+// 批量删除
+export async function batchDelete(ids: string[]) {
+  const { data } = await request({
+    url: `${REMINDER_REQUEST_PATH_PREFIX}/batchDelete`,
+    method: 'POST',
+    data: {
+      ids
+    }
+  })
+
+  return data
+}
+

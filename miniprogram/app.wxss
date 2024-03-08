@@ -33,3 +33,9 @@ page {
   background-color: #f8f8f8;
   box-sizing: border-box;
 }
+
+.flex-center-start {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}

@@ -96,6 +96,13 @@ const deleteById = async (params: { id: string }) => {
     },
   })
 
+  // 删除列表下所有代办事项
+  await ReminderItem.destroy({
+    where: {
+      parentId: id,
+    },
+  })
+
   return true
 }
 
@@ -125,6 +132,29 @@ const queryById = async (params: { id: string }) => {
   return reminder
 }
 
+const batchDelete = async (params: { ids: string[] }) => {
+  const ids = params.ids
+  if (!ids) throw new ZiMuError(REQUEST_PARAMS_ERROR_CODE, '参数 ids 不存在')
+  await Reminder.destroy({
+    where: {
+      id: {
+        [Op.in]: ids,
+      },
+    },
+  })
+
+  // 删除列表下所有代办事项
+  await ReminderItem.destroy({
+    where: {
+      parentId: {
+        [Op.in]: ids,
+      },
+    },
+  })
+
+  return true
+}
+
 export {
   querySummaryByCategory,
   queryByPage,
@@ -133,4 +163,5 @@ export {
   deleteById,
   updateById,
   queryById,
+  batchDelete,
 }

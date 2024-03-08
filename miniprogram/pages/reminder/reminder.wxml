@@ -1,21 +1,16 @@
-<!--提醒-->
+<!-- 提醒 -->
+<wxs src="reminder.wxs" module="tools" />
 <view class="reminder page-container">
   <view class="reminder-summary">
     <view class="summary-first-line">
-      <view 
-        class="summary-block half"
-        data-category="today"
-        bind:tap="handleSummaryTap">
+      <view class="summary-block half" data-category="today" bind:tap="handleSummaryTap">
         <view class="summary-block-static">
           <van-icon size="28" custom-style="color: var(--color-primary);" name="clock" />
           <text>今天</text>
         </view>
         <text class="summary-num">{{summaries.today}}</text>
       </view>
-      <view 
-        class="summary-block half"
-        data-category="plan"
-        bind:tap="handleSummaryTap">
+      <view class="summary-block half" data-category="plan" bind:tap="handleSummaryTap">
         <view class="summary-block-static">
           <van-icon size="28" custom-style="color: var(--color-warn);" name="todo-list" />
           <text>计划</text>
@@ -23,10 +18,7 @@
         <text class="summary-num">{{summaries.plan}}</text>
       </view>
     </view>
-    <view 
-      class="summary-block full"
-      data-category="all"
-      bind:tap="handleSummaryTap">
+    <view class="summary-block full" data-category="all" bind:tap="handleSummaryTap">
       <view class="summary-block-static">
         <van-icon size="28" custom-style="color: var(--color-gray-7);" name="send-gift" />
         <text>全部</text>
@@ -37,48 +29,65 @@
   <view class="reminder-list">
     <view class="list-title">
       <text>我的列表</text>
-      <van-icon size="25" name="add" bind:tap="handleAddTap" />
+      <view class="right-operations">
+        <text 
+          class="selectable-btn" 
+          bind:tap="handleSelectableClick">{{ selectable ? '取消' : '选择' }}</text>
+        <text 
+          wx:if="{{ selectedReminders.length > 0 }}"
+          class="batch-del-btn" 
+          bind:tap="handleBatchDelClick">删除</text>
+        <van-icon wx:if="{{ !selectable }}" size="25" name="add" bind:tap="handleAddTap" />
+      </view>
     </view>
     <van-empty wx:if="{{reminders.length === 0}}" description="暂无数据" />
     <scroll-view 
       wx:else 
       scroll-y 
-      enable-back-to-top
-      refresher-enabled
-      refresher-triggered="{{refresherTriggered}}"
-      show-scrollbar="{{false}}"
-      class="list-scroll-view"
-      bindrefresherrefresh="handleRefresherRefresh"
+      enable-back-to-top 
+      refresher-enabled 
+      refresher-triggered="{{refresherTriggered}}" 
+      show-scrollbar="{{false}}" 
+      class="list-scroll-view" 
+      bindrefresherrefresh="handleRefresherRefresh" 
       bindscrolltolower="handleScrollToLower">
       <van-swipe-cell 
-        class="reminder-item-cell" 
+        custom-class="reminder-item-cell" 
         wx:for="{{reminders}}" 
         wx:key="id" 
-        right-width="{{ 65 }}"
+        right-width="{{ 65 }}" 
         name="{{item.id}}">
-        <van-cell 
-          is-link 
-          title="{{item.name}}"
-          value="{{item.itemLength || 0}}" 
-          url="/pages/reminder-info/reminder-info?id={{item.id}}">
-          <van-icon slot="icon" size="22" name="info" custom-style="color: var(--color-primary); margin-right: 10rpx;" />
-        </van-cell>
-        <van-button 
-          slot="right" 
-          type="danger" 
-          square 
-          custom-style="height: 100%;"
-          data-id="{{ item.id }}"
-          bind:click="handleDelete">删除</van-button>
+        <view class="reminder-item-cell-content">
+          <van-cell 
+            is-link 
+            title="{{item.name}}" 
+            value="{{item.itemLength || 0}}" 
+            custom-style="width: 100%;"
+            data-id="{{ item.id }}"
+            bind:click="handleItemCellClick">
+            <view slot="icon" class="flex-center-start">
+              <van-checkbox 
+                wx:if="{{ selectable }}"
+                catch:tap="() => {}"
+                name="{{ item.id }}"
+                value="{{ tools.isItemChecked(selectedReminders, item.id) }}"
+                class="checkbox-{{item.id}}"
+                custom-style="width: 50rpx;"
+                data-id="{{ item.id }}"
+                bind:change="handleItemCheckboxChange" />
+              <van-icon size="22" name="info" custom-style="color: var(--color-primary); margin-right: 10rpx;" />
+            </view>
+          </van-cell>
+        </view>
+        <van-button slot="right" type="danger" square custom-style="height: 100%;" data-id="{{ item.id }}" bind:click="handleDelete">
+          删除
+        </van-button>
       </van-swipe-cell>
     </scroll-view>
+
   </view>
   <!-- 新建列表 -->
-  <van-dialog 
-    use-slot
-    close-on-click-overlay
-    show="{{showAddListDialog}}"
-    showConfirmButton="{{false}}">
+  <van-dialog use-slot close-on-click-overlay show="{{showAddListDialog}}" showConfirmButton="{{false}}">
     <view class="add-list-dialog-content">
       <input value="{{initNewListName}}" placeholder="请填写列表名称" bindconfirm="handleAddListConfirm" />
     </view>

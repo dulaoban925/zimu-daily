@@ -5,6 +5,10 @@ import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import { AccountBook } from "./types"
 import { deleteById, insert, queryByPage } from "./apis"
 
+// 分页相关默认值
+const defaultPage = 1
+const defaultPageSize = 10
+
 Page({
   options: {
     pureDataPattern: /^_/ // 指定所有 _ 开头的数据字段为纯数据字段
@@ -23,8 +27,8 @@ Page({
     // 新建账本-填写名称，在选择账本类型后触发
     showAbNameDialog: false,
     _newAbTemp: {} as AccountBook,
-    _page: 1, // 当前页
-    _pageSize: 10 // 每页数据量
+    _page: defaultPage, // 当前页
+    _pageSize: defaultPageSize // 每页数据量
   },
 
   /**
@@ -66,7 +70,12 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-    this.queryAccountBooks(this.data._page)
+    // 重置 _page _pageSize
+    this.setData({
+      _page: defaultPage, // 当前页
+      _pageSize: defaultPageSize // 每页数据量
+    })
+    this.queryAccountBooks()
       .then(() => {
         wx.stopPullDownRefresh()
       })
@@ -76,14 +85,10 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
-    const {accountBooks, _page, _pageSize} = this.data
-    if (accountBooks.length < _pageSize) return
-
+    const _page = this.data._page
     const nextPage = _page + 1
+
     this.queryAccountBooks(nextPage)
-    this.setData({
-      _page: nextPage
-    })
   },
 
   // 查询账本列表

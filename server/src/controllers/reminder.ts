@@ -10,6 +10,7 @@ const reminderBaseController: BaseController =
 const reminderController = {
   ...reminderBaseController,
   querySummaryByCategory: reminderService.querySummaryByCategory,
+  batchDelete: reminderService.batchDelete,
 }
 
 export default reminderController

@@ -1,12 +1,17 @@
-import { queryByPage, insert, deleteById } from "./api"
+import { queryByPage, insert, deleteById, batchDelete } from "./api"
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 import { querySummaryByCategory } from "./api"
 import { navigateTo } from "../../utils/rotuer"
 
-// pages/reminder/reminder.ts
-Page({
+// 分页相关默认值
+const defaultPage = 1
+const defaultPageSize = 50
 
+Page({
+  options: {
+    pureDataPattern: /^_/ // 指定所有 _ 开头的数据字段为纯数据字段
+  },
   /**
    * 页面的初始数据
    */
@@ -25,8 +30,12 @@ Page({
     refresherTriggered: false,
     // 是否正在刷新，用于避免重复刷新
     _freshing: false,
-    _page: 1, // 当前页
-    _pageSize: 50 // 每页数据量
+    _page: defaultPage, // 当前页
+    _pageSize: defaultPageSize, // 每页数据量
+    // 列表是否处于可选择状态
+    selectable: false,
+    // 已选择的事项列表
+    selectedReminders: [] as string[]
   },
 
   /**
@@ -68,14 +77,25 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh() {
-
+    // 重置 _page _pageSize
+    this.setData({
+      _page: defaultPage, // 当前页
+      _pageSize: defaultPageSize, // 每页数据量
+    })
+    this.init()
+      .then(() => {
+        wx.stopPullDownRefresh()
+      })
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom() {
+    const {_page} = this.data
+    const nextPage = _page + 1
 
+    this.queryReminders(nextPage)
   },
 
   /**
@@ -180,7 +200,7 @@ Page({
   handleDelete(e: WechatMiniprogram.BaseEvent) {
     Dialog.confirm({
       title: '警告',
-      message: '确认删除该列表？',
+      message: '删除列表将同步删除列表中的代办事项，是否确认？',
     })
       .then(async () => {
         const id = e.currentTarget.dataset.id
@@ -192,6 +212,77 @@ Page({
           .catch((e: any) => {
             Notify(`删除失败：${e.message}`)
           })
+      })
+  },
+
+  // 选择按钮点击
+  handleSelectableClick() {
+    this.setData({
+      selectable: !this.data.selectable,
+      selectedReminders: []
+    })
+  },
+
+  // 切换事项 checkbox 勾选
+  toggleItemCheckd(id: string) {
+    const checkbox = this.selectComponent(`.checkbox-${id}`)
+    checkbox.toggle()
+  },
+
+  // 选择事项变更
+  handleItemCellClick(e: WechatMiniprogram.CustomEvent) {
+    const id = e.currentTarget.dataset.id
+
+    if (this.data.selectable) {
+      this.toggleItemCheckd(id)
+    } else {
+      navigateTo({
+        url: `/pages/reminder-info/reminder-info?id=${id}`
+      })
+    }
+  },
+
+  handleItemCheckboxChange(e: WechatMiniprogram.CustomEvent) {
+    const id = e.currentTarget.dataset.id
+    const selectedReminders = this.data.selectedReminders
+
+    const index = selectedReminders.indexOf(id)
+
+    if (index > -1) {
+      selectedReminders.splice(index, 1)
+    } else {
+      selectedReminders.push(id)
+    }
+
+    this.setData({
+      selectedReminders: selectedReminders
+    })
+  },
+
+  // 批量删除处理函数
+  batchDelHandler() {
+    batchDelete(this.data.selectedReminders)
+    .then(() => {
+      Notify({ type: 'success', message: '删除成功' })
+      this.init()
+      this.setData({
+        selectable: false,
+        selectedReminders: []
+      })
+    })
+    .catch((e: any) => {
+      Notify(`删除失败：${e.message}`)
+    })
+  },
+
+  // 批量删除
+  handleBatchDelClick() {
+    Dialog.confirm({
+      title: '警告',
+      message: '删除列表将同步删除列表中的代办事项，是否确认？',
+    })
+      .then(async () => {
+        this.batchDelHandler()
       })
   }
 })

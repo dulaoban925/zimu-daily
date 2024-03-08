@@ -7,7 +7,6 @@ import './db'
 
 const app = express()
 
-console.log(process.env.PROT)
 // 设置启动端口
 app.set('port', process.env.PORT)
 

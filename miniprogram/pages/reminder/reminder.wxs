@@ -1,0 +1,7 @@
+function isItemChecked(selected, id) {
+  return selected.indexOf(id) > -1
+}
+
+module.exports = {
+  isItemChecked: isItemChecked
+}
