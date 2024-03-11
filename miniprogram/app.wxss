@@ -40,11 +40,13 @@ page {
   justify-content: flex-start;
 }
 
-.danger-text {
+.danger-text-btn {
+  font-size: 32rpx;
   color: var(--color-danger);
 }
 
-.primary-text {
+.primary-text-btn {
+  font-size: 32rpx;
   color: var(--color-primary);
 }
 

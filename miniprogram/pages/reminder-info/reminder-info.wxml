@@ -3,7 +3,8 @@
 <view class="reminder-info page-container">
   <view class="info-header">
     <text>{{ reminderHeader.name }}</text>
-    <van-icon size="25" name="ellipsis" bind:tap="handleOperationTap" />
+    <text wx:if="{{ selectable }}" class="primary-text-btn" bind:tap="handleCancelSelectableTap">完成</text>
+    <van-icon wx:else size="25" name="ellipsis" bind:tap="handleOperationTap" />
   </view>
   <view class="info-list">
     <scroll-view 
@@ -25,8 +26,8 @@
             is-link 
             center 
             use-label-slot
-            link-type="navigateTo"
-            url="/pages/reminder-item/reminder-item?id={{item.id}}">
+            data-id="{{ item.id }}"
+            bind:click="handleItemClick">
           <view slot="title">
             <span 
               wx:if="{{!!item.priority}}" 
@@ -39,7 +40,7 @@
             <text>{{item.comment}}</text>
             <text>{{item.remindTime || ''}}</text>
           </view>
-          <block slot="icon">
+          <view slot="icon">
             <van-checkbox 
               wx:if="{{ selectable }}"
               value="{{ tools.isItemChecked(selectedItems, item.id) }}" 
@@ -52,7 +53,7 @@
               data-id="{{item.id}}" 
               bind:change="handleFinishedChange"
               catch:tap="() => {}" />  
-          </block>
+          </view>
           </van-cell>
           <van-button 
             slot="right" 
@@ -70,11 +71,11 @@
   <!-- 底部操作栏 -->
   <bottom-operation-bar>
     <block wx:if="{{ selectable }}">
-      <text slot="right" class="{{ tools.getBottomOperationClass(selectedItems, 'primary') }}" bind:tap="handleBatchMoveTap">移到...</text>
+      <text slot="left" class="{{ tools.getBottomOperationClass(selectedItems, 'primary') }}" bind:tap="handleBatchMoveTap">移到...</text>
       <text slot="right" class="{{ tools.getBottomOperationClass(selectedItems, 'danger') }}" bind:tap="handleBatchDelTap">删除</text>
     </block>
     <block wx:else>
-      <view slot="left" class="flex-center-start primary-text" bind:tap="handleAddTap">
+      <view slot="left" class="flex-center-start primary-text-btn" bind:tap="handleAddTap">
         <van-icon size="25" name="add" />
         <text> 新建提醒事项 </text>
       </view>

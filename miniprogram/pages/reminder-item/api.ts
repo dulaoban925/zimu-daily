@@ -61,7 +61,7 @@ export async function deleteById(id: string) {
 }
 
 // 批量删除
-export async function batchDelete(ids: string) {
+export async function batchDelete(ids: string[]) {
   const { data } = await request({
     url: `${REMINDER_ITEM_REQUEST_PATH_PREFIX}/batchDelete`,
     method: 'POST',

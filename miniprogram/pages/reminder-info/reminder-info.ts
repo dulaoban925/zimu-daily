@@ -194,6 +194,41 @@ Page({
     this.queryReminderItems(this.data._page + 1)
   },
 
+  // 点击行项目
+  handleItemClick(e: WechatMiniprogram.CustomEvent) {
+    const id = e.currentTarget.dataset.id
+
+    /**
+     * 两种情况：
+     * 1. selectable 模式下，触发勾选
+     * 2. 非 selectable 模式，跳转详情
+     */
+    if (this.data.selectable) {
+      this.handleSelectChange(id)
+    } else {
+      navigateTo({
+        url: `/pages/reminder-item/reminder-item?id=${id}`
+      })
+    }
+  },
+
+  // selectable 模式下，触发勾选
+  handleSelectChange(e: WechatMiniprogram.CustomEvent | string) {
+    const id = typeof e === 'string' ? e : (e as WechatMiniprogram.CustomEvent).currentTarget.dataset.id
+    const selectedItems = this.data.selectedItems
+    const index = selectedItems.indexOf(id)
+
+    if (index > -1) {
+      selectedItems.splice(index, 1)
+    } else {
+      selectedItems.push(id)
+    }
+
+    this.setData({
+      selectedItems: selectedItems
+    })
+  },
+
   // 完成
   handleFinishedChange(e: WechatMiniprogram.CustomEvent) {
     const reminderItemId = e.currentTarget.dataset.id
@@ -241,6 +276,13 @@ Page({
   handleOperationActionClose() {
     this.setData({
       showOperationActions: false
+    })
+  },
+
+  // 关闭选择模式
+  handleCancelSelectableTap() {
+    this.setData({
+      selectable: false
     })
   },
 
