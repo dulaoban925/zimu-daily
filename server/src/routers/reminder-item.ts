@@ -10,6 +10,7 @@ const {
   updateById,
   queryById,
   batchDelete,
+  batchMove,
 } = reminderItemController
 
 // 所有路由
@@ -45,6 +46,11 @@ export const routes: ZiMu.RouteDefine[] = [
     path: '/batchDelete',
     method: 'post',
     handler: batchDelete,
+  },
+  {
+    path: '/batchMove',
+    method: 'post',
+    handler: batchMove,
   },
 ]
 

@@ -1,12 +1,12 @@
 import {REMINDER_CATEGORY_DESC, REMINDER_PRIORITY_MARK, REMINDER_PRIORITY_MARK_COLOR} from '../../constants/reminder'
 import {Y_N} from '../../constants/data'
-import { deleteById, queryByPage, updateById, batchDelete } from '../reminder-item/api'
+import { deleteById, queryByPage, updateById, batchDelete, batchMove } from '../reminder-item/api'
 import Notify from '../../miniprogram_npm/@vant/weapp/notify/notify'
 import Dialog from '../../miniprogram_npm/@vant/weapp/dialog/dialog'
 import { Reminder } from '../reminder/types'
 import { navigateTo } from '../../utils/rotuer'
 import { ReminderItem } from '../reminder-item/types'
-import { queryById as queryReminderById } from '../reminder/api'
+import { queryById as queryReminderById, queryList as queryReminderList } from '../reminder/api'
 
 const OPERATION_KEYS = {
   SELECTABLE: 'selectable'
@@ -44,6 +44,18 @@ Page({
       name,
       value
     })),
+    /** 移动提醒事项 start */
+    // 是否展示可移动的事项列表
+    showListSelector: false,
+    // 可移动的事项列表
+    reminderList: [] as Reminder[],
+    // 事项列表加载标识
+    listSelectorLoading: false,
+    // 列表选择弹出层字段映射
+    listSelectorFieldMap: {
+      title: 'name'
+    },
+    /** 移动提醒事项 end */
     // 列表初始化查询参数
     _initFilter: {
       byCategory: false,
@@ -282,6 +294,7 @@ Page({
   // 关闭选择模式
   handleCancelSelectableTap() {
     this.setData({
+      selectedItems: [],
       selectable: false
     })
   },
@@ -324,10 +337,7 @@ Page({
     .then(() => {
       Notify({ type: 'success', message: '删除成功' })
       this.init()
-      this.setData({
-        selectable: false,
-        selectedItems: []
-      })
+      this.handleCancelSelectableTap()
     })
     .catch((e: any) => {
       Notify(`删除失败：${e.message}`)
@@ -346,5 +356,49 @@ Page({
       .then(async () => {
         this.batchDelHandler()
       })
+  },
+
+  /** 移动提醒事项到指定列表 start */
+  // 开启移动事项列表弹出层
+  handleBatchMoveTap() {
+    this.setData({
+      showListSelector: true,
+      listSelectorLoading: true
+    })
+    queryReminderList()
+      .then((data) => {
+        this.setData({
+          reminderList: data.filter((r: Reminder) => r.id !== this.data.reminderHeader.id)
+        })
+      })
+      .finally(() => {
+        this.setData({
+          listSelectorLoading: false
+        })
+      })
+  },
+
+  // 关闭事项列表选择弹出层
+  handleListSelectorClose() {
+    this.setData({
+      showListSelector: false
+    })
+  },
+
+  // 确认移动到的事项列表
+  handleListSelectorConfirm(e: WechatMiniprogram.CustomEvent) {
+    const selected = e.detail as unknown as string
+    // todo:批量保存代办事项
+    batchMove(this.data.selectedItems, selected)
+      .then(() => {
+        Notify({ type: 'success', message: '移动成功' })
+        this.init()
+        this.handleCancelSelectableTap()
+      })
+      .catch((e: any) => {
+        Notify(`移动失败：${e.message}`)
+      })
+      .finally(this.handleListSelectorClose)
   }
+  /** 移动提醒事项到指定列表 end */
 })

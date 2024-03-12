@@ -124,13 +124,12 @@ Component({
   observers: {
     show: function (value: boolean) {
       if (!value) return
-      const { customFieldMap, fieldMap, selected } = this.data
+      const { customFieldMap, fieldMap, selected = [] } = this.data
       // 合并 fieldMap
       this.setData({
         customFieldMap: Object.assign({}, customFieldMap, fieldMap),
         actualSelected: Array.isArray(selected) ? [...selected] : [selected]
       })
-      console.log(this.data)
     }
   }
 })

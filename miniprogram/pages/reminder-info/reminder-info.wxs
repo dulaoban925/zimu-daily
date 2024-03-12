@@ -1,5 +1,5 @@
 function getBottomOperationClass(selectedItems, btnType) {
-  return selectedItems.length > 0 ? btnType + '-text' : 'disabled-text'
+  return selectedItems.length > 0 ? btnType + '-text-btn' : 'disabled-text'
 }
 
 function isItemChecked(selectedItems, id) {

@@ -111,6 +111,29 @@ const queryById = async (params: { id: string }) => {
   return reminder
 }
 
+/**
+ * 批量移动提醒事项到指定列表
+ * @param item 待移动的提醒事项 id 集合
+ * @param parentId 移动到的指定列表 id
+ */
+const batchMove = async (params: { items: string[]; parentId: string }) => {
+  const { items, parentId } = params
+  if (!parentId)
+    throw new ZiMuError(REQUEST_PARAMS_ERROR_CODE, '参数 parentId 不存在')
+  await ReminderItem.update(
+    { parentId },
+    {
+      where: {
+        id: {
+          [Op.in]: items,
+        },
+      },
+    }
+  )
+
+  return true
+}
+
 export default {
   queryByPage,
   insert,
@@ -118,4 +141,5 @@ export default {
   updateById,
   queryById,
   batchDelete,
+  batchMove,
 }

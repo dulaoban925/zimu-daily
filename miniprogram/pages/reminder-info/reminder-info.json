@@ -1,5 +1,6 @@
 {
   "usingComponents": {
-    "bottom-operation-bar": "../../components/bottom-operation-bar/bottom-operation-bar"
+    "bottom-operation-bar": "../../components/bottom-operation-bar/bottom-operation-bar",
+    "list-selector-popup": "../../components/list-selector-popup/list-selector-popup"
   }
 }

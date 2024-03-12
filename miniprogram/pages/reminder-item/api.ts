@@ -72,3 +72,17 @@ export async function batchDelete(ids: string[]) {
 
   return data
 }
+
+// 批量移动
+export async function batchMove(items: string[], parentId: string) {
+  const { data } = await request({
+    url: `${REMINDER_ITEM_REQUEST_PATH_PREFIX}/batchMove`,
+    method: 'POST',
+    data: {
+      items,
+      parentId
+    }
+  })
+
+  return data
+}

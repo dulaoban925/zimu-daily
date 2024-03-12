@@ -92,4 +92,12 @@
   <van-notify id="van-notify" />
   <!-- 弹窗实例，用于 API 调用 -->
   <van-dialog id="van-dialog" />
+  <!-- 列表选择 -->
+  <list-selector-popup 
+    show="{{ showListSelector }}"
+    data="{{ reminderList }}"
+    loading="{{ listSelectorLoading }}"
+    field-map="{{ listSelectorFieldMap }}"
+    bind:close="handleListSelectorClose"
+    bind:confirm="handleListSelectorConfirm" />
 </view>
